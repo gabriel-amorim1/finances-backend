@@ -3,8 +3,8 @@ import FinancialMovement from './FinancialMovement';
 
 @Entity('users')
 export default class User {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column()
     name: string;

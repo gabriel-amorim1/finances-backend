@@ -9,8 +9,8 @@ import User from './User';
 
 @Entity('financial_movements')
 export default class FinancialMovement {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({ type: 'uuid' })
     user_id: string;
@@ -18,7 +18,7 @@ export default class FinancialMovement {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ type: 'double precision' })
     value: number;
 
     @Column()
