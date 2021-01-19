@@ -3,10 +3,8 @@ import { container } from 'tsyringe';
 import UserService from '../services/UserService';
 
 export const create = async (req: Request, res: Response): Promise<Response> => {
-    const userData = req.body;
-
     const userService = container.resolve(UserService);
-    const response = await userService.create(userData);
+    const response = await userService.create(req.body);
 
     return res.status(201).json(response);
 };
