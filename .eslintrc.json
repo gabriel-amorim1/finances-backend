@@ -25,6 +25,7 @@
     "rules": {
         "no-await-in-loop": 0,
         "no-use-before-define": 0,
+        "no-useless-constructor": "off",
         "camelcase": 0,
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "import/prefer-default-export": "off",

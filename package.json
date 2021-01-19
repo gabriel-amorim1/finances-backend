@@ -10,11 +10,12 @@
     "test": "TS_NODE_TRANSPILE_ONLY=1 ava",
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
-},
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "sqlite3": "5.0.0",
+    "tsyringe": "^4.4.0",
     "typeorm": "^0.2.30"
   },
   "devDependencies": {
