@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 
 // import { swaggerSpec } from '../swagger';
 import apiUser from './user.routes';
-import apiFinanceMovement from './financialMovement.routes';
+import apiFinancialMovement from './financialMovement.routes';
 
 const router = Router();
 
@@ -15,6 +15,6 @@ router.get('/', (req: Request, res: Response) => {
 // });
 
 router.use('/api/user', apiUser);
-router.use('/api/finance-movement', apiFinanceMovement);
+router.use('/api/financial-movement', apiFinancialMovement);
 
 export default router;

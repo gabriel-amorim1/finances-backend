@@ -1,16 +1,18 @@
 import 'reflect-metadata';
+import app from './app';
 
-import express from 'express';
-import cors from 'cors';
-import routes from './routes';
-
-import './database/connection';
+import connect from './database/connection';
 import './containers';
 
-const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(routes);
+async function startServer() {
+    connect();
 
-app.listen(3333);
+    app.listen(PORT, () => {
+        // eslint-disable-next-line no-console
+        console.log(`Service running on port ${PORT}`);
+    });
+}
+
+startServer();
