@@ -1,6 +1,6 @@
 import { FinancialMovementInterface } from './FinancialMovementInterface';
 
-export interface User {
+export interface UserInterface {
     name: string;
     email: string;
 
