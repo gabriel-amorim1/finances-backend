@@ -30,7 +30,7 @@ export default class FinancialMovement {
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     updated_at: Date;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User, user => user.financial_movements, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: User;
 }

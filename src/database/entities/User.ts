@@ -23,6 +23,7 @@ export default class User {
         financialMovement => financialMovement.user,
         {
             eager: true,
+            cascade: true,
         },
     )
     financial_movements?: FinancialMovement[];
