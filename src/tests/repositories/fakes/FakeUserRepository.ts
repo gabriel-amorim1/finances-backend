@@ -1,3 +1,4 @@
+import { DeleteResult } from 'typeorm';
 import { v4 } from 'uuid';
 
 import User from '../../../database/entities/User';
@@ -23,5 +24,25 @@ export default class FakeUserRepository implements IUserRepository {
         const userFound = this.users.find(user => user.id === id);
 
         return userFound;
+    }
+
+    public async getAll(): Promise<{ data: User[]; count: number }> {
+        const data = this.users;
+        const count = this.users.length;
+
+        return { data, count };
+    }
+
+    public async update(userUpdate: User): Promise<User> {
+        const findIndex = this.users.findIndex(user => user.id === userUpdate.id);
+
+        this.users[findIndex] = userUpdate;
+
+        return this.users[findIndex];
+    }
+
+    public async remove(id: string): Promise<DeleteResult> {
+        this.users = this.users.filter(user => user.id !== id);
+        return <any>{ raw: [] };
     }
 }
