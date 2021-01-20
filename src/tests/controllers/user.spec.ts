@@ -76,7 +76,7 @@ describe('Sales Origin Route context', () => {
 
         expect(res.status).toBe(200);
         expect(res.body).toStrictEqual(<any>{ data: 'users', count: 2 });
-        expect(userServiceSpy.getAll.calledWithExactly()).toBeTruthy();
+        expect(userServiceSpy.getAll.calledWithExactly({})).toBeTruthy();
     });
 
     it('should be call update controller with user data and returns status 201', async () => {

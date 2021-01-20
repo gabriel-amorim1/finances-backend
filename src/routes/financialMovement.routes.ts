@@ -6,7 +6,7 @@ import {
     updateFinancialMovementSchema,
 } from '../utils/financialMovement/validators';
 import validatorMiddleware from '../utils/middlewares/validator';
-import { idSchema } from '../utils/validators/commom';
+import { idSchema } from '../utils/validators/common';
 
 const router = Router();
 
@@ -86,7 +86,58 @@ router.get(
     FinancialMovementController.findById,
 );
 
+/**
+ * @swagger
+ * /api/financial-movement:
+ *   get:
+ *     tags:
+ *       - Financial Movement
+ *     description: Get all Financial Movements
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       '200':
+ *         description: Financial Movements
+ *         schema:
+ *           $ref: '#/definitions/FinancialMovementGetAll'
+ */
+
 router.get('/', FinancialMovementController.getAll);
+
+/**
+ * @swagger
+ * /api/financial-movement/:financialMovementId:
+ *   put:
+ *     tags:
+ *       - Financial Movement
+ *     description: Update an Financial Movement
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: financialMovementId
+ *         type: uuid
+ *         required: true
+ *       - name: Financial Movement
+ *         description: JSON with Financial Movement attributes.
+ *         in: body
+ *         required: true
+ *         schema:
+ *            $ref: '#/definitions/FinancialMovementUpdate'
+ *     responses:
+ *       '200':
+ *         description: Financial Movement was updated successfully.
+ *         schema:
+ *           $ref: '#/definitions/FinancialMovement'
+ *       '400':
+ *         description: Validation Error
+ *         schema:
+ *           $ref: '#/definitions/ValidationError'
+ *       '404':
+ *         description: Resource not found
+ *         schema:
+ *           $ref: '#/definitions/NotFound'
+ */
 
 router.put(
     '/:id',
@@ -96,6 +147,33 @@ router.put(
     }),
     FinancialMovementController.update,
 );
+
+/**
+ * @swagger
+ * /api/financial-movement/:financialMovementId:
+ *   delete:
+ *     tags:
+ *       - Financial Movement
+ *     description: Delete Financial Movement by Id
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: path
+ *         name: financialMovementId
+ *         type: uuid
+ *         required: true
+ *     responses:
+ *       '204':
+ *         description: Financial Movement was deleted successfully.
+ *       '400':
+ *         description: Validation Error
+ *         schema:
+ *           $ref: '#/definitions/ValidationError'
+ *       '404':
+ *         description: Resource not found
+ *         schema:
+ *           $ref: '#/definitions/NotFound'
+ */
 
 router.delete(
     '/:id',

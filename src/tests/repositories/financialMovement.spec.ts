@@ -37,6 +37,8 @@ describe('FinancialMovement context', () => {
             ...entityProps
         } = await financialMovementRepository.createAndSave(movement);
 
+        await userRepository.remove(createdUser.id);
+
         expect(entityProps).toEqual(movement);
         expect(id).not.toBeUndefined();
         expect(created_at).not.toBeUndefined();
@@ -66,6 +68,8 @@ describe('FinancialMovement context', () => {
         const res = await financialMovementRepository.findById(
             createdFinancialMovement.id,
         );
+
+        await userRepository.remove(createdUser.id);
 
         expect(res).toEqual(createdFinancialMovement);
     });
@@ -104,6 +108,8 @@ describe('FinancialMovement context', () => {
 
         const arrrayOfIds = res.data.map(movement => movement.id);
 
+        await userRepository.remove(createdUser.id);
+
         expect(arrrayOfIds.includes(id1)).toBeTruthy();
         expect(arrrayOfIds.includes(id2)).toBeTruthy();
     });
@@ -132,6 +138,8 @@ describe('FinancialMovement context', () => {
 
         const res = await financialMovementRepository.update(createdMovement);
 
+        await userRepository.remove(createdUser.id);
+
         expect(res).toEqual(createdMovement);
         expect(res.id).toBe(createdMovement.id);
     });
@@ -157,6 +165,8 @@ describe('FinancialMovement context', () => {
         );
 
         const res = await financialMovementRepository.remove(createdMovement.id);
+
+        await userRepository.remove(createdUser.id);
 
         expect(res).toEqual({ raw: [] });
     });

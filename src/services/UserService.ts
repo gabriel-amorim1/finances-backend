@@ -2,7 +2,12 @@ import { inject, injectable } from 'tsyringe';
 import { DeleteResult } from 'typeorm';
 import User from '../database/entities/User';
 import IUserRepository from '../interfaces/repositories/IUserRepository';
-import { UserInterface } from '../interfaces/UserInterface';
+import {
+    UserInterface,
+    UserRequestGetAllInterface,
+} from '../interfaces/UserInterface';
+import { buildFilterGetAll } from '../utils/dataBase/filters';
+import { buildPaginatedGetAll } from '../utils/dataBase/pagination';
 import { HttpError } from '../utils/errors/HttpError';
 
 @injectable()
@@ -24,10 +29,14 @@ class UserService {
         return user;
     }
 
-    public async getAll(): Promise<{ data: User[]; count: number }> {
-        const users = await this.userRepository.getAll();
+    public async getAll(
+        queryParams: UserRequestGetAllInterface,
+    ): Promise<{ data: User[]; count: number }> {
+        const options = buildFilterGetAll(queryParams);
 
-        return users;
+        const users = await this.userRepository.getAll(options);
+
+        return buildPaginatedGetAll(queryParams, users);
     }
 
     public async update(id: string, userUpdate: UserInterface): Promise<User> {

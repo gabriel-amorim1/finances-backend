@@ -54,5 +54,31 @@
                 "example": "joão.silva@finances.com"
             }
         }
+    },
+    "UserUpdate": {
+        "properties": {
+            "name": {
+                "type": "string",
+                "example": "João da Silveira"
+            },
+            "email": {
+                "type": "string",
+                "example": "joão.silveira@finances.com"
+            }
+        }
+    },
+    "UserGetAll": {
+        "properties": {
+            "data": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/User"
+                }
+            },
+            "count": {
+                "type": "number",
+                "example": 2
+            }
+        }
     }
 }

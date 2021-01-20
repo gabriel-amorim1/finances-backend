@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
+import { UserRequestGetAllInterface } from '../interfaces/UserInterface';
 import UserService from '../services/UserService';
+import { getAllUserSchema } from '../utils/user/validators';
 
 export const create = async (req: Request, res: Response): Promise<Response> => {
     const userService = container.resolve(UserService);
@@ -19,8 +21,12 @@ export const findById = async (req: Request, res: Response): Promise<Response> =
 };
 
 export const getAll = async (req: Request, res: Response): Promise<Response> => {
+    const query = (await getAllUserSchema.validate(req.query, {
+        stripUnknown: true,
+    })) as UserRequestGetAllInterface;
+
     const userService = container.resolve(UserService);
-    const response = await userService.getAll();
+    const response = await userService.getAll(query);
 
     return res.status(200).json(response);
 };

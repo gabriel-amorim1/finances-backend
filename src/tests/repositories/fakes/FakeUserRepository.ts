@@ -2,6 +2,7 @@ import { DeleteResult } from 'typeorm';
 import { v4 } from 'uuid';
 
 import User from '../../../database/entities/User';
+import { OptionsTypeOrmGetAll } from '../../../interfaces/pagination';
 import IUserRepository from '../../../interfaces/repositories/IUserRepository';
 import { UserInterface } from '../../../interfaces/UserInterface';
 
@@ -26,7 +27,9 @@ export default class FakeUserRepository implements IUserRepository {
         return userFound;
     }
 
-    public async getAll(): Promise<{ data: User[]; count: number }> {
+    public async getAll(
+        options: OptionsTypeOrmGetAll,
+    ): Promise<{ data: User[]; count: number }> {
         const data = this.users;
         const count = this.users.length;
 

@@ -1,5 +1,6 @@
 import { DeleteResult, getRepository, Repository } from 'typeorm';
 import User from '../database/entities/User';
+import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 import IUserRepository from '../interfaces/repositories/IUserRepository';
 import { UserInterface } from '../interfaces/UserInterface';
 
@@ -20,8 +21,10 @@ export default class UserRepository implements IUserRepository {
         return this.ormRepository.findOne(id);
     }
 
-    public async getAll(): Promise<{ data: User[]; count: number }> {
-        const [data, count] = await this.ormRepository.findAndCount();
+    public async getAll(
+        options: OptionsTypeOrmGetAll,
+    ): Promise<{ data: User[]; count: number }> {
+        const [data, count] = await this.ormRepository.findAndCount(options);
 
         return { data, count };
     }

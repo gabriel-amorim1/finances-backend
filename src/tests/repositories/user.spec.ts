@@ -23,6 +23,8 @@ describe('User context', () => {
             ...entityProps
         } = await userRepository.createAndSave(user);
 
+        await userRepository.remove(id);
+
         expect(entityProps).toEqual(user);
         expect(id).not.toBeUndefined();
         expect(created_at).not.toBeUndefined();
@@ -40,10 +42,20 @@ describe('User context', () => {
 
         const res = await userRepository.findById(createdUser.id);
 
+        await userRepository.remove(createdUser.id);
+
         expect(res).toEqual(createdUser);
     });
 
     it('Should return all Users', async () => {
+        const options = {
+            where: {},
+            order: { created_at: 'DESC' },
+            take: 20,
+            skip: 0,
+            orderBy: { columnName: 'created_at', order: 'DESC' },
+        };
+
         const user1 = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
@@ -59,7 +71,10 @@ describe('User context', () => {
         const { id: id1 } = await userRepository.createAndSave(user1);
         const { id: id2 } = await userRepository.createAndSave(user2);
 
-        const res = await userRepository.getAll();
+        const res = await userRepository.getAll(<any>options);
+
+        await userRepository.remove(id1);
+        await userRepository.remove(id2);
 
         const arrrayOfIds = res.data.map(user => user.id);
 
@@ -79,6 +94,8 @@ describe('User context', () => {
         createdUser.email = 'gabriel@updated.com';
 
         const res = await userRepository.update(createdUser);
+
+        await userRepository.remove(createdUser.id);
 
         expect(res).toEqual(createdUser);
         expect(res.id).toBe(createdUser.id);
