@@ -10,3 +10,14 @@ export const createFinancialMovementSchema = yup.object().shape({
         .strict(true)
         .required('The property classification is required'),
 });
+
+export const updateFinancialMovementSchema = yup.object().shape({
+    user_id: yup.string().uuid().optional(),
+    name: yup.string().optional(),
+    value: yup.number().optional(),
+    classification: yup
+        .string()
+        .oneOf(['receita', 'gastos essenciais', 'gastos não essenciais'])
+        .strict(true)
+        .optional(),
+});

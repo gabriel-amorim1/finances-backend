@@ -19,3 +19,29 @@ export const findById = async (req: Request, res: Response): Promise<Response> =
 
     return res.status(200).json(response);
 };
+
+export const getAll = async (req: Request, res: Response): Promise<Response> => {
+    const financialMovementService = container.resolve(FinancialMovementService);
+    const response = await financialMovementService.getAll();
+
+    return res.status(200).json(response);
+};
+
+export const update = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const movementUpdate = req.body;
+
+    const financialMovementService = container.resolve(FinancialMovementService);
+    const response = await financialMovementService.update(id, movementUpdate);
+
+    return res.status(200).json(response);
+};
+
+export const remove = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+
+    const financialMovementService = container.resolve(FinancialMovementService);
+    const response = await financialMovementService.remove(id);
+
+    return res.status(204).json(response);
+};

@@ -1,7 +1,10 @@
 import { Router } from 'express';
 
 import * as FinancialMovementController from '../controllers/FinancialMovementController';
-import { createFinancialMovementSchema } from '../utils/financialMovement/validators';
+import {
+    createFinancialMovementSchema,
+    updateFinancialMovementSchema,
+} from '../utils/financialMovement/validators';
 import validatorMiddleware from '../utils/middlewares/validator';
 import { idSchema } from '../utils/validators/commom';
 
@@ -81,6 +84,25 @@ router.get(
         params: idSchema,
     }),
     FinancialMovementController.findById,
+);
+
+router.get('/', FinancialMovementController.getAll);
+
+router.put(
+    '/:id',
+    validatorMiddleware({
+        params: idSchema,
+        body: updateFinancialMovementSchema,
+    }),
+    FinancialMovementController.update,
+);
+
+router.delete(
+    '/:id',
+    validatorMiddleware({
+        params: idSchema,
+    }),
+    FinancialMovementController.remove,
 );
 
 export default router;
