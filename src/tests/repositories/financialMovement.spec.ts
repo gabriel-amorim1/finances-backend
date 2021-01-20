@@ -69,4 +69,95 @@ describe('FinancialMovement context', () => {
 
         expect(res).toEqual(createdFinancialMovement);
     });
+
+    it('Should return all Financial Movements', async () => {
+        const user = new UserBuilder()
+            .withName('Gabriel')
+            .withEmail('gabriel@teste.com')
+            .withFinancialMovements([])
+            .build();
+
+        const createdUser = await userRepository.createAndSave(user);
+
+        const movement1 = new FinancialMovementBuilder()
+            .withName('Gabriel')
+            .withUserId(createdUser.id)
+            .withValue(123.01)
+            .withClassification('receita')
+            .build();
+
+        const movement2 = new FinancialMovementBuilder()
+            .withName('Gabriel')
+            .withUserId(createdUser.id)
+            .withValue(123.01)
+            .withClassification('receita')
+            .build();
+
+        const { id: id1 } = await financialMovementRepository.createAndSave(
+            movement1,
+        );
+        const { id: id2 } = await financialMovementRepository.createAndSave(
+            movement2,
+        );
+
+        const res = await financialMovementRepository.getAll();
+
+        const arrrayOfIds = res.data.map(movement => movement.id);
+
+        expect(arrrayOfIds.includes(id1)).toBeTruthy();
+        expect(arrrayOfIds.includes(id2)).toBeTruthy();
+    });
+
+    it('Should be able to update an Financial Movements by id', async () => {
+        const user = new UserBuilder()
+            .withName('Gabriel')
+            .withEmail('gabriel@teste.com')
+            .withFinancialMovements([])
+            .build();
+
+        const createdUser = await userRepository.createAndSave(user);
+
+        const movement = new FinancialMovementBuilder()
+            .withName('Gabriel')
+            .withUserId(createdUser.id)
+            .withValue(123.01)
+            .withClassification('receita')
+            .build();
+
+        const createdMovement = await financialMovementRepository.createAndSave(
+            movement,
+        );
+
+        createdMovement.value = 321.05;
+
+        const res = await financialMovementRepository.update(createdMovement);
+
+        expect(res).toEqual(createdMovement);
+        expect(res.id).toBe(createdMovement.id);
+    });
+
+    it('Should be able to remove an Financial Movements by id', async () => {
+        const user = new UserBuilder()
+            .withName('Gabriel')
+            .withEmail('gabriel@teste.com')
+            .withFinancialMovements([])
+            .build();
+
+        const createdUser = await userRepository.createAndSave(user);
+
+        const movement = new FinancialMovementBuilder()
+            .withName('Gabriel')
+            .withUserId(createdUser.id)
+            .withValue(123.01)
+            .withClassification('receita')
+            .build();
+
+        const createdMovement = await financialMovementRepository.createAndSave(
+            movement,
+        );
+
+        const res = await financialMovementRepository.remove(createdMovement.id);
+
+        expect(res).toEqual({ raw: [] });
+    });
 });

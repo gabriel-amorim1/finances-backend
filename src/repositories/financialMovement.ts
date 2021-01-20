@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { DeleteResult, getRepository, Repository } from 'typeorm';
 import FinancialMovement from '../database/entities/FinancialMovement';
 import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
@@ -21,5 +21,21 @@ export default class FinancialMovementRepository
 
     public async findById(id: string): Promise<FinancialMovement | undefined> {
         return this.ormRepository.findOne(id);
+    }
+
+    public async getAll(): Promise<{ data: FinancialMovement[]; count: number }> {
+        const [data, count] = await this.ormRepository.findAndCount();
+
+        return { data, count };
+    }
+
+    public async update(
+        movementUpdate: FinancialMovement,
+    ): Promise<FinancialMovement> {
+        return this.ormRepository.save(movementUpdate);
+    }
+
+    public async remove(id: string): Promise<DeleteResult> {
+        return this.ormRepository.delete(id);
     }
 }
