@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import * as UserController from '../controllers/UserController';
 import validatorMiddleware from '../utils/middlewares/validator';
-import { createUserSchema } from '../utils/user/validators';
+import { createUserSchema, updateUserSchema } from '../utils/user/validators';
 import { idSchema } from '../utils/validators/commom';
 
 const router = Router();
@@ -81,6 +81,25 @@ router.get(
         params: idSchema,
     }),
     UserController.findById,
+);
+
+router.get('/', UserController.getAll);
+
+router.put(
+    '/:id',
+    validatorMiddleware({
+        params: idSchema,
+        body: updateUserSchema,
+    }),
+    UserController.update,
+);
+
+router.delete(
+    '/:id',
+    validatorMiddleware({
+        params: idSchema,
+    }),
+    UserController.remove,
 );
 
 export default router;
