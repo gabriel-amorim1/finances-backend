@@ -98,6 +98,9 @@ describe('FinancialMovement Service', () => {
         const expectedRes = {
             data: [sut1, sut2],
             count: 2,
+            limit: 20,
+            page: 1,
+            totalPages: 1,
         };
 
         const res = await financialMovementService.getAll({});
@@ -109,6 +112,9 @@ describe('FinancialMovement Service', () => {
         const expectedRes = {
             data: [],
             count: 0,
+            limit: 20,
+            page: 1,
+            totalPages: 0,
         };
 
         const res = await financialMovementService.getAll({});
