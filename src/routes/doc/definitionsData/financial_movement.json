@@ -1,0 +1,67 @@
+{
+    "FinancialMovement": {
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
+            },
+            "user_id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
+            },
+            "name": {
+                "type": "string",
+                "example": "salário"
+            },
+            "value": {
+                "type": "number",
+                "example": 1000.00
+            },
+            "classification": {
+                "type": "string",
+                "enum": ["receita", "gastos essenciais", "gastos não essenciais"],
+                "example": "receita"
+            },
+            "created_at": {
+                "type": "string",
+                "format": "data",
+                "example": "2021-01-19T19:11:43.000Z"
+            },
+            "updated_at": {
+                "type": "string",
+                "format": "data",
+                "example": "2021-01-19T19:11:43.000Z"
+            }
+        }
+    },
+    "FinancialMovementCreate": {
+        "required": [
+            "user_id",
+            "name",
+            "value",
+            "classification"
+        ],
+        "properties": {
+            "user_id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
+            },
+            "name": {
+                "type": "string",
+                "example": "salário"
+            },
+            "value": {
+                "type": "number",
+                "example": 1000.00
+            },
+            "classification": {
+                "type": "string",
+                "enum": ["receita", "gastos essenciais", "gastos não essenciais"],
+                "example": "receita"
+            }
+        }
+    }
+}
