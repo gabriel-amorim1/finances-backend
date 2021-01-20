@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
+import { FinancialMovementRequestGetAllInterface } from '../interfaces/FinancialMovementInterface';
 import FinancialMovementService from '../services/FinancialMovementService';
+import { getAllFinancialMovementSchema } from '../utils/financialMovement/validators';
 
 export const create = async (req: Request, res: Response): Promise<Response> => {
     const financialMovementData = req.body;
@@ -21,8 +23,12 @@ export const findById = async (req: Request, res: Response): Promise<Response> =
 };
 
 export const getAll = async (req: Request, res: Response): Promise<Response> => {
+    const query = (await getAllFinancialMovementSchema.validate(req.query, {
+        stripUnknown: true,
+    })) as FinancialMovementRequestGetAllInterface;
+
     const financialMovementService = container.resolve(FinancialMovementService);
-    const response = await financialMovementService.getAll();
+    const response = await financialMovementService.getAll(query);
 
     return res.status(200).json(response);
 };

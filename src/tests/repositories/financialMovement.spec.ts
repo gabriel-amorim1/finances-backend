@@ -75,6 +75,14 @@ describe('FinancialMovement context', () => {
     });
 
     it('Should return all Financial Movements', async () => {
+        const options = {
+            where: {},
+            order: { created_at: 'DESC' },
+            take: 20,
+            skip: 0,
+            orderBy: { columnName: 'created_at', order: 'DESC' },
+        };
+
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
@@ -104,7 +112,7 @@ describe('FinancialMovement context', () => {
             movement2,
         );
 
-        const res = await financialMovementRepository.getAll();
+        const res = await financialMovementRepository.getAll(<any>options);
 
         const arrrayOfIds = res.data.map(movement => movement.id);
 

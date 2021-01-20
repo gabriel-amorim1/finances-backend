@@ -95,6 +95,31 @@ router.get(
  *     description: Get all Financial Movements
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         type: number
+ *       - in: query
+ *         name: size
+ *         type: number
+ *       - in: query
+ *         name: sortParam
+ *         type: string
+ *       - in: query
+ *         name: sortOrder
+ *         type: string
+ *       - in: query
+ *         name: name
+ *         type: string
+ *       - in: query
+ *         name: email
+ *         type: string
+ *       - in: query
+ *         name: created_at
+ *         type: string
+ *       - in: query
+ *         name: updated_at
+ *         type: string
  *     responses:
  *       '200':
  *         description: Financial Movements

@@ -1,6 +1,7 @@
 import { DeleteResult, getRepository, Repository } from 'typeorm';
 import FinancialMovement from '../database/entities/FinancialMovement';
 import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
+import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
 
 export default class FinancialMovementRepository
@@ -23,8 +24,10 @@ export default class FinancialMovementRepository
         return this.ormRepository.findOne(id);
     }
 
-    public async getAll(): Promise<{ data: FinancialMovement[]; count: number }> {
-        const [data, count] = await this.ormRepository.findAndCount();
+    public async getAll(
+        options: OptionsTypeOrmGetAll,
+    ): Promise<{ data: FinancialMovement[]; count: number }> {
+        const [data, count] = await this.ormRepository.findAndCount(options);
 
         return { data, count };
     }

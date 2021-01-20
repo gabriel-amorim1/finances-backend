@@ -106,10 +106,16 @@ router.get(
  *         name: sortOrder
  *         type: string
  *       - in: query
+ *         name: user_id
+ *         type: string
+ *       - in: query
  *         name: name
  *         type: string
  *       - in: query
- *         name: email
+ *         name: value
+ *         type: string
+ *       - in: query
+ *         name: classification
  *         type: string
  *       - in: query
  *         name: created_at
@@ -124,13 +130,7 @@ router.get(
  *           $ref: '#/definitions/UserGetAll'
  */
 
-router.get(
-    '/',
-    validatorMiddleware({
-        query: getAllUserSchema,
-    }),
-    UserController.getAll,
-);
+router.get('/', UserController.getAll);
 
 /**
  * @swagger

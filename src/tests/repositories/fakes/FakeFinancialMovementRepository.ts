@@ -4,6 +4,7 @@ import { DeleteResult } from 'typeorm';
 import FinancialMovement from '../../../database/entities/FinancialMovement';
 import IFinancialMovementRepository from '../../../interfaces/repositories/IFinancialMovementRepository';
 import { FinancialMovementInterface } from '../../../interfaces/FinancialMovementInterface';
+import { OptionsTypeOrmGetAll } from '../../../interfaces/pagination';
 
 export default class FakeFinancialMovementRepository
     implements IFinancialMovementRepository {
@@ -34,7 +35,9 @@ export default class FakeFinancialMovementRepository
         return financialMovementFound;
     }
 
-    public async getAll(): Promise<{ data: FinancialMovement[]; count: number }> {
+    public async getAll(
+        options: OptionsTypeOrmGetAll,
+    ): Promise<{ data: FinancialMovement[]; count: number }> {
         const data = this.financialMovements;
         const count = this.financialMovements.length;
 

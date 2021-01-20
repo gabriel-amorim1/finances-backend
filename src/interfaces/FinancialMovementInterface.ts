@@ -1,4 +1,5 @@
 import User from '../database/entities/User';
+import { RequestGetAllInterface } from './pagination';
 
 export interface FinancialMovementInterface {
     user_id: string;
@@ -10,4 +11,12 @@ export interface FinancialMovementInterface {
     created_at?: Date;
     updated_at?: Date;
     user?: User;
+}
+
+export interface FinancialMovementRequestGetAllInterface
+    extends RequestGetAllInterface {
+    user_id?: string;
+    name?: string;
+    value?: number;
+    classification?: string;
 }

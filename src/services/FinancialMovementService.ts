@@ -1,8 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 import { DeleteResult } from 'typeorm';
 import FinancialMovement from '../database/entities/FinancialMovement';
-import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
+import {
+    FinancialMovementInterface,
+    FinancialMovementRequestGetAllInterface,
+} from '../interfaces/FinancialMovementInterface';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
+import { buildFilterGetAll } from '../utils/dataBase/filters';
+import { buildPaginatedGetAll } from '../utils/dataBase/pagination';
 import { HttpError } from '../utils/errors/HttpError';
 import UserService from './UserService';
 
@@ -37,10 +42,16 @@ class FinancialMovementService {
         return financialMovement;
     }
 
-    public async getAll(): Promise<{ data: FinancialMovement[]; count: number }> {
-        const users = await this.financialMovementRepository.getAll();
+    public async getAll(
+        queryParams: FinancialMovementRequestGetAllInterface,
+    ): Promise<{ data: FinancialMovement[]; count: number }> {
+        const options = buildFilterGetAll(queryParams);
 
-        return users;
+        const financialMovements = await this.financialMovementRepository.getAll(
+            options,
+        );
+
+        return buildPaginatedGetAll(queryParams, financialMovements);
     }
 
     public async update(

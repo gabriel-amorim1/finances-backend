@@ -100,7 +100,7 @@ describe('FinancialMovement Service', () => {
             count: 2,
         };
 
-        const res = await financialMovementService.getAll();
+        const res = await financialMovementService.getAll({});
 
         expect(res).toEqual(expectedRes);
     });
@@ -111,7 +111,7 @@ describe('FinancialMovement Service', () => {
             count: 0,
         };
 
-        const res = await financialMovementService.getAll();
+        const res = await financialMovementService.getAll({});
 
         expect(res).toEqual(expectedRes);
     });
