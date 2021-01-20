@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { DeleteResult, getRepository, Repository } from 'typeorm';
 import User from '../database/entities/User';
 import IUserRepository from '../interfaces/repositories/IUserRepository';
 import { UserInterface } from '../interfaces/UserInterface';
@@ -18,5 +18,19 @@ export default class UserRepository implements IUserRepository {
 
     public async findById(id: string): Promise<User | undefined> {
         return this.ormRepository.findOne(id);
+    }
+
+    public async getAll(): Promise<{ data: User[]; count: number }> {
+        const [data, count] = await this.ormRepository.findAndCount();
+
+        return { data, count };
+    }
+
+    public async update(userUpdate: User): Promise<User> {
+        return this.ormRepository.save(userUpdate);
+    }
+
+    public async remove(id: string): Promise<DeleteResult> {
+        return this.ormRepository.delete(id);
     }
 }
