@@ -7,7 +7,13 @@ export const createFinancialMovementSchema = yup.object().shape({
     value: yup.number().required('The property value is required'),
     classification: yup
         .string()
-        .oneOf(['receita', 'gastos essenciais', 'gastos não essenciais'])
+        .oneOf([
+            'receita',
+            'gastos essenciais',
+            'gastos não essenciais',
+            'investimentos',
+            'torrar',
+        ])
         .strict(true)
         .required('The property classification is required'),
 });
@@ -18,7 +24,13 @@ export const updateFinancialMovementSchema = yup.object().shape({
     value: yup.number().optional(),
     classification: yup
         .string()
-        .oneOf(['receita', 'gastos essenciais', 'gastos não essenciais'])
+        .oneOf([
+            'receita',
+            'gastos essenciais',
+            'gastos não essenciais',
+            'investimentos',
+            'torrar',
+        ])
         .strict(true)
         .optional(),
 });
