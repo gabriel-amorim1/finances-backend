@@ -7,7 +7,7 @@ const swaggerDefinition = {
         title: 'API Finances',
         version: '1.0.0',
     },
-    host: process.env.HOST || 'localhost:3000',
+    host: process.env.HOST || 'localhost:3333',
     basePath: '/',
 } as SwaggerDefinition;
 
