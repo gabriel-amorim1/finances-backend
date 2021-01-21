@@ -7,11 +7,11 @@ import { idSchema } from '../utils/validators/common';
 const router = Router();
 
 router.get(
-    '/basic/:id',
+    '/base/:id',
     validatorMiddleware({
         params: idSchema,
     }),
-    SpendingDivisionController.getBasicSpendingDivision,
+    SpendingDivisionController.getBaseSpendingDivision,
 );
 
 router.get(

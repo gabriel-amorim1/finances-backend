@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import FinancialMovement from '../database/entities/FinancialMovement';
 
 import { SpendingDivisionInterface } from '../interfaces/SpendingDivisionInterface';
 import { HttpError } from '../utils/errors/HttpError';
@@ -11,7 +12,7 @@ class SpendingDivisionService {
         private userService: UserService,
     ) {}
 
-    public async getBasicSpendingDivision(
+    public async getBaseSpendingDivision(
         userId: string,
     ): Promise<SpendingDivisionInterface> {
         const user = await this.userService.findById(userId);
@@ -77,22 +78,27 @@ class SpendingDivisionService {
     ): Promise<SpendingDivisionInterface> {
         const user = await this.userService.findById(userId);
         const essentialExpenses = {
+            financial_movements: <FinancialMovement[]>[],
             inPercentage: 0,
             inValue: 0,
         };
         const nonEssentialExpenses = {
+            financial_movements: <FinancialMovement[]>[],
             inPercentage: 0,
             inValue: 0,
         };
         const investments = {
+            financial_movements: <FinancialMovement[]>[],
             inPercentage: 0,
             inValue: 0,
         };
         const waste = {
+            financial_movements: <FinancialMovement[]>[],
             inPercentage: 0,
             inValue: 0,
         };
         const remnant = {
+            financial_movements: <FinancialMovement[]>[],
             inPercentage: 0,
             inValue: 0,
         };
@@ -116,6 +122,9 @@ class SpendingDivisionService {
         }
 
         const income = {
+            financial_movements: user.financial_movements.filter(
+                movement => movement.classification === 'receita',
+            ),
             inPercentage: 1,
             inValue: incomes.reduce(
                 (incomeValueSum, incomeValue) => incomeValueSum + incomeValue,
@@ -130,11 +139,14 @@ class SpendingDivisionService {
             .map(movement => movement.value);
 
         if (essentialExpensesRegistered.length > 0) {
+            essentialExpenses.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'gastos essenciais',
+            );
             const sumOfessentialExpenses = essentialExpensesRegistered.reduce(
                 (valueSum, valueRegistered) => valueSum + valueRegistered,
             );
             remnant.inValue -= sumOfessentialExpenses;
-            essentialExpenses.inValue -= sumOfessentialExpenses;
+            essentialExpenses.inValue = sumOfessentialExpenses;
             essentialExpenses.inPercentage =
                 Math.round((sumOfessentialExpenses * 100) / income.inValue) / 100;
         }
@@ -144,11 +156,14 @@ class SpendingDivisionService {
             .map(movement => movement.value);
 
         if (nonEssentialExpensesRegistered.length > 0) {
+            nonEssentialExpenses.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'gastos não essenciais',
+            );
             const sumOfNonEssentialExpenses = nonEssentialExpensesRegistered.reduce(
                 (valueSum, valueRegistered) => valueSum + valueRegistered,
             );
             remnant.inValue -= sumOfNonEssentialExpenses;
-            nonEssentialExpenses.inValue -= sumOfNonEssentialExpenses;
+            nonEssentialExpenses.inValue = sumOfNonEssentialExpenses;
             nonEssentialExpenses.inPercentage =
                 Math.round((sumOfNonEssentialExpenses * 100) / income.inValue) / 100;
         }
@@ -158,11 +173,14 @@ class SpendingDivisionService {
             .map(movement => movement.value);
 
         if (investmentsRegistered.length > 0) {
+            investments.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'investimentos',
+            );
             const sumOfInvestments = investmentsRegistered.reduce(
                 (valueSum, valueRegistered) => valueSum + valueRegistered,
             );
             remnant.inValue -= sumOfInvestments;
-            investments.inValue -= sumOfInvestments;
+            investments.inValue = sumOfInvestments;
             investments.inPercentage =
                 Math.round((sumOfInvestments * 100) / income.inValue) / 100;
         }
@@ -172,11 +190,14 @@ class SpendingDivisionService {
             .map(movement => movement.value);
 
         if (wastesRegistered.length > 0) {
+            waste.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'torrar',
+            );
             const sumOfWaste = wastesRegistered.reduce(
                 (valueSum, valueRegistered) => valueSum + valueRegistered,
             );
             remnant.inValue -= sumOfWaste;
-            waste.inValue -= sumOfWaste;
+            waste.inValue = sumOfWaste;
             waste.inPercentage =
                 Math.round((sumOfWaste * 100) / income.inValue) / 100;
         }

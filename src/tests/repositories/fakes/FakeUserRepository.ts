@@ -13,6 +13,7 @@ export default class FakeUserRepository implements IUserRepository {
         const user = Object.assign(new User(), userData);
 
         user.id = v4();
+        user.financial_movements = [];
         user.created_at = new Date();
         user.updated_at = new Date();
 

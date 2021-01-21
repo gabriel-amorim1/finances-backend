@@ -38,6 +38,7 @@ describe('User Service', () => {
         const expectedRes = {
             ...sut,
             id: res.id,
+            financial_movements: [],
             created_at: res.created_at,
             updated_at: res.updated_at,
         };
@@ -52,6 +53,7 @@ describe('User Service', () => {
             id: sut.id,
             name: 'Gabriel',
             email: 'gabriel@teste.com',
+            financial_movements: [],
             created_at: sut.created_at,
             updated_at: sut.updated_at,
         };
@@ -112,6 +114,7 @@ describe('User Service', () => {
             id: sut.id,
             name: 'Gabriel',
             email: 'gabriel@update.com',
+            financial_movements: [],
             created_at: sut.created_at,
             updated_at: sut.updated_at,
         };
