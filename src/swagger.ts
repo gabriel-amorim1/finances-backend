@@ -17,6 +17,7 @@ const options = {
         './dist/routes/index.js',
         './dist/routes/user.routes.js',
         './dist/routes/financialMovement.routes.js',
+        './dist/routes/spendingDivision.routes.js',
     ],
 } as Options;
 

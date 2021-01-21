@@ -1,0 +1,46 @@
+{
+    "SpendingDivision": {
+        "properties": {
+            "income": {
+                "$ref": "#/definitions/ClassificationFormat"
+            },
+            "essentialExpenses": {
+                "$ref": "#/definitions/ClassificationFormat"
+            },
+            "nonEssentialExpenses": {
+                "$ref": "#/definitions/ClassificationFormat"
+            },
+            "investments": {
+                "$ref": "#/definitions/ClassificationFormat"
+            },
+            "waste": {
+                "$ref": "#/definitions/ClassificationFormat"
+            },
+            "remnant": {
+                "$ref": "#/definitions/ClassificationFormat"
+            }
+        }
+    },
+    "ClassificationFormat": {
+        "required": [
+            "inPercentage",
+            "inValue"
+        ],
+        "properties": {
+            "inPercentage": {
+                "type": "number",
+                "example": 0.5
+            },
+            "inValue": {
+                "type": "number",
+                "example": 1000
+            },
+            "financial_movements":{
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/FinancialMovement"
+                }
+            }
+        }
+    }
+}
