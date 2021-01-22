@@ -1,0 +1,29 @@
+{
+    "ValidationError": {
+        "properties": {
+            "code":{
+                "type": "number",
+                "example": 400
+            },
+            "message": {
+                "type": "string",
+                "example": "Validation Error"
+            },
+            "errors": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "property": {
+                            "type": "string",
+                            "description": "Param value was sent wrong"
+                        },
+                        "message": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "User": {
+        "required": [
+            "id",
+            "name",
+            "email",
+            "created_at",
+            "updated_at"
+        ],
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
+            },
+            "name": {
+                "type": "string",
+                "example": "João da Silva"
+            },
+            "email": {
+                "type": "string",
+                "example": "joão.silva@finances.com"
+            },
+            "created_at": {
+                "type": "string",
+                "format": "data",
+                "example": "2021-01-19T19:11:43.000Z"
+            },
+            "updated_at": {
+                "type": "string",
+                "format": "data",
+                "example": "2021-01-19T19:11:43.000Z"
+            },
+            "financial_movements": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/FinancialMovement"
+                }
+            }
+        }
+    },
+    "UserCreate": {
+        "required": [
+            "name",
+            "email"
+        ],
+        "properties": {
+            "name": {
+                "type": "string",
+                "example": "João da Silva"
+            },
+            "email": {
+                "type": "string",
+                "example": "joão.silva@finances.com"
+            }
+        }
+    },
+    "UserUpdate": {
+        "properties": {
+            "name": {
+                "type": "string",
+                "example": "João da Silveira"
+            },
+            "email": {
+                "type": "string",
+                "example": "joão.silveira@finances.com"
+            }
+        }
+    },
+    "UserGetAll": {
+        "properties": {
+            "data": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/User"
+                }
+            },
+            "count": {
+                "type": "number",
+                "example": 2
+            }
+        }
+    }
+}

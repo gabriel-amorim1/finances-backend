@@ -1,0 +1,14 @@
+{
+    "NotFound": {
+        "properties": {
+            "code": {
+                "type": "number",
+                "example": 404
+            },
+            "message": {
+                "type": "string",
+                "example": "Object not found"
+            }
+        }
+    }
+}
