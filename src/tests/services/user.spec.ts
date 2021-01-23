@@ -46,6 +46,23 @@ describe('User Service', () => {
         expect(res).toEqual(expectedRes);
     });
 
+    it('should not to be able to create a new User - Email already registered.', async () => {
+        expect.hasAssertions();
+
+        try {
+            const sut = {
+                name: 'Gabriel',
+                email: 'gabriel@teste.com',
+            };
+
+            await userService.create(sut);
+            await userService.create(sut);
+        } catch (error) {
+            expect(error).toBeInstanceOf(HttpError);
+            expect(error.message).toBe('Email already registered.');
+        }
+    });
+
     it('should be able to find a User by id', async () => {
         const sut = await makeSut();
 
@@ -76,7 +93,7 @@ describe('User Service', () => {
 
     it('should be able to get all Users', async () => {
         const sut1 = await makeSut();
-        const sut2 = await makeSut();
+        const sut2 = await makeSut({ email: 'teste@teste.com' });
 
         const expectedRes = {
             data: [sut1, sut2],

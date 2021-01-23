@@ -47,6 +47,22 @@ describe('User context', () => {
         expect(res).toEqual(createdUser);
     });
 
+    it('Should return an User when find by email', async () => {
+        const user = new UserBuilder()
+            .withName('Gabriel')
+            .withEmail('gabriel@teste.com')
+            .withFinancialMovements([])
+            .build();
+
+        const createdUser = await userRepository.createAndSave(user);
+
+        const res = await userRepository.findByEmail(createdUser.email);
+
+        await userRepository.remove(createdUser.id);
+
+        expect(res).toEqual(createdUser);
+    });
+
     it('Should return all Users', async () => {
         const options = {
             where: {},

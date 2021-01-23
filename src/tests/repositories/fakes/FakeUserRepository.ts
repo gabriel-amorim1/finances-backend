@@ -28,6 +28,12 @@ export default class FakeUserRepository implements IUserRepository {
         return userFound;
     }
 
+    public async findByEmail(email: string): Promise<User | undefined> {
+        const userFound = this.users.find(user => user.email === email);
+
+        return userFound;
+    }
+
     public async getAll(
         options: OptionsTypeOrmGetAll,
     ): Promise<{ data: User[]; count: number }> {
