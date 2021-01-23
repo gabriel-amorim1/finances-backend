@@ -18,6 +18,10 @@ class UserService {
     ) {}
 
     public async create(userData: UserInterface): Promise<User> {
+        if (await this.userRepository.findByEmail(userData.email)) {
+            throw new HttpError(400, 'Email already registered.');
+        }
+
         return this.userRepository.createAndSave(userData);
     }
 

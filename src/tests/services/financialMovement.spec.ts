@@ -27,6 +27,7 @@ describe('FinancialMovement Service', () => {
 
     const makeSut = async (
         financialMovementData?: Partial<FinancialMovementInterface>,
+        userData?: Partial<UserInterface>,
     ): Promise<FinancialMovement> => {
         const user: UserInterface = {
             id: v4(),
@@ -34,6 +35,7 @@ describe('FinancialMovement Service', () => {
             email: 'gabriel@teste.com',
             created_at: new Date(),
             updated_at: new Date(),
+            ...userData,
         };
 
         const createdUser = await userService.create(Object.assign(user));
@@ -93,7 +95,7 @@ describe('FinancialMovement Service', () => {
 
     it('should be able to get all FinancialMovements', async () => {
         const sut1 = await makeSut();
-        const sut2 = await makeSut();
+        const sut2 = await makeSut(undefined, { email: 'teste@teste.com' });
 
         const expectedRes = {
             data: [sut1, sut2],

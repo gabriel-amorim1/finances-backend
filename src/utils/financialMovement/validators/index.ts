@@ -41,7 +41,13 @@ export const getAllFinancialMovementSchema = yup.object().shape({
     value: yup.number().optional(),
     classification: yup
         .string()
-        .oneOf(['receita', 'gastos essenciais', 'gastos não essenciais'])
+        .oneOf([
+            'receita',
+            'gastos essenciais',
+            'gastos não essenciais',
+            'investimentos',
+            'torrar',
+        ])
         .strict(true)
         .optional(),
     ...getAllRequestSchema.fields,
