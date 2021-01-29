@@ -5,6 +5,7 @@ import { RequestGetAllInterface } from '../../interfaces/pagination';
 
 export const dynamicFilter = <T>(
     data: T & RequestGetAllInterface,
+    user_id?: string,
 ): Record<string, unknown> => {
     const { dateFilter, startDateFilter, endDateFilter } = data;
 
@@ -30,7 +31,7 @@ export const dynamicFilter = <T>(
             [key]: Raw(alias => `CAST(${alias} AS VARCHAR) LIKE '%${value}%'`),
         };
     }
-
+    if (user_id) query.user_id = user_id;
     if (dateFilter && startDateFilter && endDateFilter)
         query[dateFilter] = betweenDataFilter(startDateFilter, endDateFilter);
 

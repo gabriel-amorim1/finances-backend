@@ -35,13 +35,7 @@ const router = Router();
  *           $ref: '#/definitions/NotFound'
  */
 
-router.get(
-    '/base/:id',
-    validatorMiddleware({
-        params: idSchema,
-    }),
-    SpendingDivisionController.getBaseSpendingDivision,
-);
+router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
 
 /**
  * @swagger
@@ -72,12 +66,6 @@ router.get(
  *           $ref: '#/definitions/NotFound'
  */
 
-router.get(
-    '/:id',
-    validatorMiddleware({
-        params: idSchema,
-    }),
-    SpendingDivisionController.getSpendingDivisionByUser,
-);
+router.get('/', SpendingDivisionController.getSpendingDivisionByUser);
 
 export default router;
