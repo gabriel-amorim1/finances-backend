@@ -8,7 +8,7 @@ export const getBaseSpendingDivision = async (
 ): Promise<Response> => {
     const spendingDivisionService = container.resolve(SpendingDivisionService);
     const response = await spendingDivisionService.getBaseSpendingDivision(
-        req.headers.user_id as string,
+        req.user.id,
     );
 
     return res.status(200).json(response);
@@ -20,7 +20,7 @@ export const getSpendingDivisionByUser = async (
 ): Promise<Response> => {
     const spendingDivisionService = container.resolve(SpendingDivisionService);
     const response = await spendingDivisionService.getSpendingDivisionByUser(
-        req.headers.user_id as string,
+        req.user.id,
     );
 
     return res.status(200).json(response);

@@ -1,8 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import jwt from 'jwt-promisify';
+import { verify } from 'jsonwebtoken';
 
 import { NextFunction, Request, Response } from 'express';
+
+interface ITokenPayload {
+    iat: number;
+    exp: number;
+    id: string;
+}
 
 export default async (
     req: Request,
@@ -18,9 +22,10 @@ export default async (
     const [scheme, token] = authHeader.split(' ');
 
     try {
-        const decoded = <any>await jwt.verify(token, process.env.APP_SECRET!);
+        const decoded = verify(token, process.env.APP_SECRET!);
 
-        req.headers.user_id = decoded.id;
+        const { id } = decoded as ITokenPayload;
+        req.user = { id };
 
         return next();
     } catch (err) {
