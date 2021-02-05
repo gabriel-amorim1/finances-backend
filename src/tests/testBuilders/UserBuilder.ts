@@ -23,6 +23,16 @@ export default class UserBuilder {
         return this;
     }
 
+    public withPassword(password: string): UserBuilder {
+        this.user.password = password;
+        return this;
+    }
+
+    public withPasswordHash(password_hash: string): UserBuilder {
+        this.user.password_hash = password_hash;
+        return this;
+    }
+
     public withCreatedAt(createdAt: Date): UserBuilder {
         this.user.created_at = createdAt;
         return this;

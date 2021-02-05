@@ -14,12 +14,14 @@ describe('User context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .build();
 
         const {
             id,
             created_at,
             updated_at,
+            password_hash,
             ...entityProps
         } = await userRepository.createAndSave(user);
 
@@ -27,6 +29,7 @@ describe('User context', () => {
 
         expect(entityProps).toEqual(user);
         expect(id).not.toBeUndefined();
+        expect(password_hash).not.toBeUndefined();
         expect(created_at).not.toBeUndefined();
         expect(updated_at).not.toBeUndefined();
     });
@@ -35,32 +38,40 @@ describe('User context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
-        const createdUser = await userRepository.createAndSave(user);
+        const { password, ...createdUser } = await userRepository.createAndSave(
+            user,
+        );
 
         const res = await userRepository.findById(createdUser.id);
 
         await userRepository.remove(createdUser.id);
 
         expect(res).toEqual(createdUser);
+        expect(password).not.toBeUndefined();
     });
 
     it('Should return an User when find by email', async () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
-        const createdUser = await userRepository.createAndSave(user);
+        const { password, ...createdUser } = await userRepository.createAndSave(
+            user,
+        );
 
         const res = await userRepository.findByEmail(createdUser.email);
 
         await userRepository.remove(createdUser.id);
 
         expect(res).toEqual(createdUser);
+        expect(password).not.toBeUndefined();
     });
 
     it('Should return all Users', async () => {
@@ -75,12 +86,14 @@ describe('User context', () => {
         const user1 = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
         const user2 = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -92,16 +105,17 @@ describe('User context', () => {
         await userRepository.remove(id1);
         await userRepository.remove(id2);
 
-        const arrrayOfIds = res.data.map(user => user.id);
+        const arrayOfIds = res.data.map(user => user.id);
 
-        expect(arrrayOfIds.includes(id1)).toBeTruthy();
-        expect(arrrayOfIds.includes(id2)).toBeTruthy();
+        expect(arrayOfIds.includes(id1)).toBeTruthy();
+        expect(arrayOfIds.includes(id2)).toBeTruthy();
     });
 
     it('Should be able to update an User by id', async () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -121,6 +135,7 @@ describe('User context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
