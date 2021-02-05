@@ -8,24 +8,20 @@ import FinancialMovementService from '../../services/FinancialMovementService';
 import { isParamsInValidationErrors } from '../../utils/errors/validationError';
 import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
 
-describe('Financial Movement Route context', () => {
+describe('Sales Origin Route context', () => {
     let financialMovementServiceSpy: sinon.SinonStubbedInstance<FinancialMovementService>;
 
     beforeEach(() => {
-        process.env.ENVIRONMENT = 'DEV';
         sinon.restore();
         financialMovementServiceSpy = sinon.createStubInstance(
             FinancialMovementService,
         );
     });
 
-    afterAll(() => {
-        process.env.ENVIRONMENT = 'PRODUCTION';
-    });
-
     it('should be call create controller with financialMovement data and returns status 201', async () => {
         const movementData = new FinancialMovementBuilder()
             .withName('Gabriel')
+            .withUserId(v4())
             .withValue(123.01)
             .withClassification('receita')
             .build();
@@ -39,6 +35,9 @@ describe('Financial Movement Route context', () => {
 
         expect(res.status).toBe(201);
         expect(res.body).toStrictEqual(movementData);
+        expect(
+            financialMovementServiceSpy.create.calledWithExactly(<any>movementData),
+        ).toBeTruthy();
     });
 
     it('should be return status 400 when not send params', async () => {
@@ -49,6 +48,10 @@ describe('Financial Movement Route context', () => {
             code: 400,
             message: 'Validation Error',
             errors: [
+                {
+                    property: 'user_id',
+                    message: 'The property user_id is required',
+                },
                 { property: 'name', message: 'The property name is required' },
                 { property: 'value', message: 'The property value is required' },
                 {
@@ -98,6 +101,9 @@ describe('Financial Movement Route context', () => {
 
         expect(res.status).toBe(200);
         expect(res.body).toStrictEqual(<any>{ data: 'movements', count: 2 });
+        expect(
+            financialMovementServiceSpy.getAll.calledWithExactly({}),
+        ).toBeTruthy();
     });
 
     it('should be call update controller with user data and returns status 201', async () => {

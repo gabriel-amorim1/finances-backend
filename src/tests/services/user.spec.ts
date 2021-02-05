@@ -5,20 +5,17 @@ import User from '../../database/entities/User';
 import { UserInterface } from '../../interfaces/UserInterface';
 import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
 import { HttpError } from '../../utils/errors/HttpError';
-import FakeFinancialMovementRepository from '../repositories/fakes/FakeFinancialMovementRepository';
 
 describe('User Service', () => {
     let userService: UserService;
     let fakeUserRepository: FakeUserRepository;
-    let fakeFinancialMovementRepository: FakeFinancialMovementRepository;
 
     beforeEach(async () => {
-        fakeFinancialMovementRepository = new FakeFinancialMovementRepository();
-        fakeUserRepository = new FakeUserRepository(fakeFinancialMovementRepository);
+        fakeUserRepository = new FakeUserRepository();
         userService = new UserService(fakeUserRepository);
     });
 
-    const makeSut = (userData?: Partial<UserInterface>): Promise<UserInterface> => {
+    const makeSut = (userData?: Partial<UserInterface>): Promise<User> => {
         const user: UserInterface = {
             id: v4(),
             name: 'Gabriel',
@@ -41,6 +38,7 @@ describe('User Service', () => {
         const expectedRes = {
             ...sut,
             id: res.id,
+            financial_movements: [],
             created_at: res.created_at,
             updated_at: res.updated_at,
         };
@@ -68,7 +66,7 @@ describe('User Service', () => {
     it('should be able to find a User by id', async () => {
         const sut = await makeSut();
 
-        const expectedRes = <UserInterface>{
+        const expectedRes = <User>{
             id: sut.id,
             name: 'Gabriel',
             email: 'gabriel@teste.com',
@@ -77,7 +75,7 @@ describe('User Service', () => {
             updated_at: sut.updated_at,
         };
 
-        const res = await userService.findById(sut.id!);
+        const res = await userService.findById(sut.id);
 
         expect(res).toEqual(expectedRes);
     });
@@ -98,10 +96,7 @@ describe('User Service', () => {
         const sut2 = await makeSut({ email: 'teste@teste.com' });
 
         const expectedRes = {
-            data: [
-                { ...sut1, financial_movements: [] },
-                { ...sut2, financial_movements: [] },
-            ],
+            data: [sut1, sut2],
             count: 2,
             limit: 20,
             page: 1,
@@ -132,7 +127,7 @@ describe('User Service', () => {
 
         const email = 'gabriel@update.com';
 
-        const expectedRes = <UserInterface>{
+        const expectedRes = <User>{
             id: sut.id,
             name: 'Gabriel',
             email: 'gabriel@update.com',
@@ -141,7 +136,7 @@ describe('User Service', () => {
             updated_at: sut.updated_at,
         };
 
-        const res = await userService.update(sut.id!, <any>{ email });
+        const res = await userService.update(sut.id, <any>{ email });
 
         expect(res).toEqual(expectedRes);
     });
@@ -160,7 +155,7 @@ describe('User Service', () => {
     it('should be able to remove a User by id', async () => {
         const sut = await makeSut();
 
-        const res = await userService.remove(sut.id!);
+        const res = await userService.remove(sut.id);
 
         expect(res).toEqual({ raw: [] });
     });

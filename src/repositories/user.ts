@@ -12,7 +12,7 @@ export default class UserRepository implements IUserRepository {
     }
 
     public async createAndSave(userData: UserInterface): Promise<User> {
-        const user = Object.assign(new User(), userData);
+        const user = this.ormRepository.create(userData);
 
         return this.ormRepository.save(user);
     }

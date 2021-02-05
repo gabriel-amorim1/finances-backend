@@ -11,14 +11,6 @@ export default interface IFinancialMovementRepository {
     getAll(
         options: OptionsTypeOrmGetAll,
     ): Promise<{ data: FinancialMovement[]; count: number }>;
-    getAllGroupByClassification(
-        user_id: string,
-    ): Promise<
-        {
-            classification: string;
-            inValue: number;
-        }[]
-    >;
     update(movementUpdate: FinancialMovement): Promise<FinancialMovement>;
     remove(id: string): Promise<DeleteResult>;
 }

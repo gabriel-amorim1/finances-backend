@@ -44,9 +44,8 @@ class FinancialMovementService {
 
     public async getAll(
         queryParams: FinancialMovementRequestGetAllInterface,
-        user_id: string,
     ): Promise<{ data: FinancialMovement[]; count: number }> {
-        const options = buildFilterGetAll(queryParams, user_id);
+        const options = buildFilterGetAll(queryParams);
 
         const financialMovements = await this.financialMovementRepository.getAll(
             options,

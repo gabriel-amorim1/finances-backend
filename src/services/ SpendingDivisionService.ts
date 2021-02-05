@@ -1,10 +1,8 @@
 import { inject, injectable } from 'tsyringe';
-import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
+import FinancialMovement from '../database/entities/FinancialMovement';
 
 import { SpendingDivisionInterface } from '../interfaces/SpendingDivisionInterface';
-import { buildSpendingDivision } from '../utils/builders/spendingDivision';
 import { HttpError } from '../utils/errors/HttpError';
-import { calculatePercentage } from '../utils/spendingDivision';
 import UserService from './UserService';
 
 @injectable()
@@ -12,9 +10,6 @@ class SpendingDivisionService {
     constructor(
         @inject('UserService')
         private userService: UserService,
-
-        @inject('FinancialMovementRepository')
-        private financialMovementRepository: IFinancialMovementRepository,
     ) {}
 
     public async getBaseSpendingDivision(
@@ -82,6 +77,31 @@ class SpendingDivisionService {
         userId: string,
     ): Promise<SpendingDivisionInterface> {
         const user = await this.userService.findById(userId);
+        const essentialExpenses = {
+            financial_movements: <FinancialMovement[]>[],
+            inPercentage: 0,
+            inValue: 0,
+        };
+        const nonEssentialExpenses = {
+            financial_movements: <FinancialMovement[]>[],
+            inPercentage: 0,
+            inValue: 0,
+        };
+        const investments = {
+            financial_movements: <FinancialMovement[]>[],
+            inPercentage: 0,
+            inValue: 0,
+        };
+        const waste = {
+            financial_movements: <FinancialMovement[]>[],
+            inPercentage: 0,
+            inValue: 0,
+        };
+        const remnant = {
+            financial_movements: <FinancialMovement[]>[],
+            inPercentage: 0,
+            inValue: 0,
+        };
 
         if (!user.financial_movements || user.financial_movements.length <= 0) {
             throw new HttpError(
@@ -90,55 +110,100 @@ class SpendingDivisionService {
             );
         }
 
-        const incomesRegistered = user.financial_movements.filter(
-            movement => movement.classification === 'receita',
-        );
+        const incomes = user.financial_movements
+            .filter(movement => movement.classification === 'receita')
+            .map(movement => movement.value);
 
-        if (incomesRegistered.length <= 0) {
+        if (incomes.length <= 0) {
             throw new HttpError(
                 400,
                 'This User has no financial movements as "receita" registered yet.',
             );
         }
 
-        const financialGroups = await this.financialMovementRepository.getAllGroupByClassification(
-            userId,
-        );
+        const income = {
+            financial_movements: user.financial_movements.filter(
+                movement => movement.classification === 'receita',
+            ),
+            inPercentage: 1,
+            inValue: incomes.reduce(
+                (incomeValueSum, incomeValue) => incomeValueSum + incomeValue,
+            ),
+        };
 
-        const {
-            income,
-            essentialExpenses,
-            nonEssentialExpenses,
-            investments,
-            waste,
-            remnant,
-        } = buildSpendingDivision(financialGroups);
+        remnant.inValue = income.inValue;
+        remnant.inPercentage = income.inPercentage;
 
-        income.financial_movements = incomesRegistered;
+        const essentialExpensesRegistered = user.financial_movements
+            .filter(movement => movement.classification === 'gastos essenciais')
+            .map(movement => movement.value);
 
-        essentialExpenses.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'gastos essenciais',
-        );
+        if (essentialExpensesRegistered.length > 0) {
+            essentialExpenses.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'gastos essenciais',
+            );
+            const sumOfessentialExpenses = essentialExpensesRegistered.reduce(
+                (valueSum, valueRegistered) => valueSum + valueRegistered,
+            );
+            remnant.inValue -= sumOfessentialExpenses;
+            essentialExpenses.inValue = sumOfessentialExpenses;
+            essentialExpenses.inPercentage =
+                Math.round((sumOfessentialExpenses * 100) / income.inValue) / 100;
+        }
 
-        nonEssentialExpenses.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'gastos não essenciais',
-        );
+        const nonEssentialExpensesRegistered = user.financial_movements
+            .filter(movement => movement.classification === 'gastos não essenciais')
+            .map(movement => movement.value);
 
-        investments.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'investimentos',
-        );
+        if (nonEssentialExpensesRegistered.length > 0) {
+            nonEssentialExpenses.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'gastos não essenciais',
+            );
+            const sumOfNonEssentialExpenses = nonEssentialExpensesRegistered.reduce(
+                (valueSum, valueRegistered) => valueSum + valueRegistered,
+            );
+            remnant.inValue -= sumOfNonEssentialExpenses;
+            nonEssentialExpenses.inValue = sumOfNonEssentialExpenses;
+            nonEssentialExpenses.inPercentage =
+                Math.round((sumOfNonEssentialExpenses * 100) / income.inValue) / 100;
+        }
 
-        waste.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'torrar',
-        );
+        const investmentsRegistered = user.financial_movements
+            .filter(movement => movement.classification === 'investimentos')
+            .map(movement => movement.value);
 
-        remnant.inValue =
-            income.inValue -
-            essentialExpenses.inValue -
-            nonEssentialExpenses.inValue -
-            investments.inValue -
-            waste.inValue;
-        remnant.inPercentage = calculatePercentage(income.inValue, remnant.inValue);
+        if (investmentsRegistered.length > 0) {
+            investments.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'investimentos',
+            );
+            const sumOfInvestments = investmentsRegistered.reduce(
+                (valueSum, valueRegistered) => valueSum + valueRegistered,
+            );
+            remnant.inValue -= sumOfInvestments;
+            investments.inValue = sumOfInvestments;
+            investments.inPercentage =
+                Math.round((sumOfInvestments * 100) / income.inValue) / 100;
+        }
+
+        const wastesRegistered = user.financial_movements
+            .filter(movement => movement.classification === 'torrar')
+            .map(movement => movement.value);
+
+        if (wastesRegistered.length > 0) {
+            waste.financial_movements = user.financial_movements.filter(
+                movement => movement.classification === 'torrar',
+            );
+            const sumOfWaste = wastesRegistered.reduce(
+                (valueSum, valueRegistered) => valueSum + valueRegistered,
+            );
+            remnant.inValue -= sumOfWaste;
+            waste.inValue = sumOfWaste;
+            waste.inPercentage =
+                Math.round((sumOfWaste * 100) / income.inValue) / 100;
+        }
+
+        remnant.inPercentage =
+            Math.round((remnant.inValue * 100) / income.inValue) / 100;
 
         return {
             income,

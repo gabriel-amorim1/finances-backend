@@ -20,10 +20,6 @@ const router = Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *       - name: Financial Movement
  *         description: JSON with Financial Movement attributes.
  *         in: body
@@ -63,10 +59,6 @@ router.post(
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *       - in: path
  *         name: financialMovementId
  *         type: uuid
@@ -104,10 +96,6 @@ router.get(
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *       - in: query
  *         name: page
  *         type: number
@@ -151,10 +139,6 @@ router.get('/', FinancialMovementController.getAll);
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *       - in: path
  *         name: financialMovementId
  *         type: uuid
@@ -199,10 +183,6 @@ router.put(
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *       - in: path
  *         name: financialMovementId
  *         type: uuid

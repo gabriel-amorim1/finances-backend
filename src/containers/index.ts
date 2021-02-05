@@ -6,7 +6,6 @@ import FinancialMovementRepository from '../repositories/financialMovement';
 import UserRepository from '../repositories/user';
 import SpendingDivisionService from '../services/ SpendingDivisionService';
 import FinancialMovementService from '../services/FinancialMovementService';
-import SessionService from '../services/SessionService';
 import UserService from '../services/UserService';
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
@@ -17,8 +16,6 @@ container.registerSingleton<IFinancialMovementRepository>(
 );
 
 container.registerSingleton<UserService>('UserService', UserService);
-
-container.registerSingleton<SessionService>('SessionService', SessionService);
 
 container.registerSingleton<FinancialMovementService>(
     'FinancialMovementService',

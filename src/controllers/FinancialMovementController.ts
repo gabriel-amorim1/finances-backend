@@ -1,19 +1,14 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
-import { v4 } from 'uuid';
 import { FinancialMovementRequestGetAllInterface } from '../interfaces/FinancialMovementInterface';
 import FinancialMovementService from '../services/FinancialMovementService';
 import { getAllFinancialMovementSchema } from '../utils/financialMovement/validators';
 
 export const create = async (req: Request, res: Response): Promise<Response> => {
     const financialMovementData = req.body;
-    const user_id = req.user.id;
 
     const financialMovementService = container.resolve(FinancialMovementService);
-    const response = await financialMovementService.create({
-        ...financialMovementData,
-        user_id,
-    });
+    const response = await financialMovementService.create(financialMovementData);
 
     return res.status(201).json(response);
 };
@@ -33,7 +28,7 @@ export const getAll = async (req: Request, res: Response): Promise<Response> => 
     })) as FinancialMovementRequestGetAllInterface;
 
     const financialMovementService = container.resolve(FinancialMovementService);
-    const response = await financialMovementService.getAll(query, req.user.id);
+    const response = await financialMovementService.getAll(query);
 
     return res.status(200).json(response);
 };

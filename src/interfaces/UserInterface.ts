@@ -8,8 +8,6 @@ export interface UserInterface {
     id?: string;
     created_at?: Date;
     updated_at?: Date;
-    password?: string;
-    password_hash?: string;
     financial_movements?: FinancialMovementInterface[];
 }
 

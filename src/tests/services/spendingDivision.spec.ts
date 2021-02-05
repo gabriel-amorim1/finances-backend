@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import FinancialMovementService from '../../services/FinancialMovementService';
 import FinancialMovement from '../../database/entities/FinancialMovement';
 import FakeFinancialMovementRepository from '../repositories/fakes/FakeFinancialMovementRepository';
@@ -6,9 +5,9 @@ import UserService from '../../services/UserService';
 import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
 import SpendingDivisionService from '../../services/ SpendingDivisionService';
 import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
+import User from '../../database/entities/User';
 import UserBuilder from '../testBuilders/UserBuilder';
 import { HttpError } from '../../utils/errors/HttpError';
-import { UserInterface } from '../../interfaces/UserInterface';
 
 describe('Spending Division Service', () => {
     let financialMovementService: FinancialMovementService;
@@ -18,81 +17,84 @@ describe('Spending Division Service', () => {
     let fakeFinancialMovementRepository: FakeFinancialMovementRepository;
 
     beforeEach(async () => {
-        fakeFinancialMovementRepository = new FakeFinancialMovementRepository();
-        fakeUserRepository = new FakeUserRepository(fakeFinancialMovementRepository);
+        fakeUserRepository = new FakeUserRepository();
         userService = new UserService(fakeUserRepository);
+        spendingDivisionService = new SpendingDivisionService(userService);
+        fakeFinancialMovementRepository = new FakeFinancialMovementRepository();
         financialMovementService = new FinancialMovementService(
             fakeFinancialMovementRepository,
             userService,
         );
-        spendingDivisionService = new SpendingDivisionService(
-            userService,
-            fakeFinancialMovementRepository,
-        );
     });
 
-    const makeSut = async (): Promise<UserInterface> => {
+    const makeSut = async (): Promise<User> => {
         const user = new UserBuilder()
             .withName('Gabriel')
-            .withEmail(`gabriel@${v4()}.com`)
-            .withPassword('123456')
-            .withFinancialMovements([])
+            .withEmail('gabriel@teste.com')
             .build();
 
         const createdUser = await userService.create(user);
 
+        const financial_movements: FinancialMovement[] = [];
+
         const income = new FinancialMovementBuilder()
-            .withUserId(createdUser.id!)
+            .withUserId(createdUser.id)
             .withClassification('receita')
             .withName('Salário')
             .withValue(15000)
             .build();
 
-        await financialMovementService.create(income);
+        financial_movements.push(await financialMovementService.create(income));
 
         const essentialExpense = new FinancialMovementBuilder()
-            .withUserId(createdUser.id!)
+            .withUserId(createdUser.id)
             .withClassification('gastos essenciais')
             .withName('Despesas Domésticas')
             .withValue(5000)
             .build();
 
-        await financialMovementService.create(essentialExpense);
+        financial_movements.push(
+            await financialMovementService.create(essentialExpense),
+        );
 
         const nonEssentialExpense = new FinancialMovementBuilder()
-            .withUserId(createdUser.id!)
+            .withUserId(createdUser.id)
             .withClassification('gastos não essenciais')
             .withName('Academia')
             .withValue(500)
             .build();
 
-        await financialMovementService.create(nonEssentialExpense);
+        financial_movements.push(
+            await financialMovementService.create(nonEssentialExpense),
+        );
 
         const investment = new FinancialMovementBuilder()
-            .withUserId(createdUser.id!)
+            .withUserId(createdUser.id)
             .withClassification('investimentos')
             .withName('CDB Banco Inter')
             .withValue(1000)
             .build();
 
-        await financialMovementService.create(investment);
+        financial_movements.push(await financialMovementService.create(investment));
 
         const waste = new FinancialMovementBuilder()
-            .withUserId(createdUser.id!)
+            .withUserId(createdUser.id)
             .withClassification('torrar')
             .withName('Rolês')
             .withValue(3000)
             .build();
 
-        await financialMovementService.create(waste);
+        financial_movements.push(await financialMovementService.create(waste));
 
-        return userService.findById(createdUser.id!);
+        createdUser.financial_movements!.push(...financial_movements);
+
+        return userService.update(createdUser.id, createdUser);
     };
 
     it('should return base spending by user', async () => {
         const user = await makeSut();
 
-        const res = await spendingDivisionService.getBaseSpendingDivision(user.id!);
+        const res = await spendingDivisionService.getBaseSpendingDivision(user.id);
 
         const expectedRes = {
             income: { inPercentage: 1, inValue: 15000 },
@@ -112,13 +114,12 @@ describe('Spending Division Service', () => {
         try {
             const user = new UserBuilder()
                 .withName('Gabriel')
-                .withEmail(`gabriel@${v4()}.com`)
-                .withPassword('123456')
+                .withEmail('gabriel@teste.com')
                 .build();
 
             const createdUser = await userService.create(user);
 
-            await spendingDivisionService.getBaseSpendingDivision(createdUser.id!);
+            await spendingDivisionService.getBaseSpendingDivision(createdUser.id);
         } catch (error) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
@@ -130,9 +131,7 @@ describe('Spending Division Service', () => {
     it('should return calculated spending by user', async () => {
         const user = await makeSut();
 
-        const res = await spendingDivisionService.getSpendingDivisionByUser(
-            user.id!,
-        );
+        const res = await spendingDivisionService.getSpendingDivisionByUser(user.id);
 
         const expectedRes = {
             income: {
@@ -219,6 +218,7 @@ describe('Spending Division Service', () => {
             remnant: {
                 inPercentage: 0.37,
                 inValue: 5500,
+                financial_movements: [],
             },
         };
 
@@ -231,13 +231,12 @@ describe('Spending Division Service', () => {
         try {
             const user = new UserBuilder()
                 .withName('Gabriel')
-                .withEmail(`gabriel@${v4()}.com`)
-                .withPassword('123456')
+                .withEmail('gabriel@teste.com')
                 .build();
 
             const createdUser = await userService.create(user);
 
-            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id!);
+            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id);
         } catch (error) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
@@ -252,22 +251,29 @@ describe('Spending Division Service', () => {
         try {
             const user = new UserBuilder()
                 .withName('Gabriel')
-                .withEmail(`gabriel@${v4()}.com`)
-                .withPassword('123456')
+                .withEmail('gabriel@teste.com')
                 .build();
 
             const createdUser = await userService.create(user);
 
+            const financial_movements: FinancialMovement[] = [];
+
             const essentialExpense = new FinancialMovementBuilder()
-                .withUserId(createdUser.id!)
+                .withUserId(createdUser.id)
                 .withClassification('gastos essenciais')
                 .withName('Despesas Domésticas')
                 .withValue(5000)
                 .build();
 
-            await financialMovementService.create(essentialExpense);
+            financial_movements.push(
+                await financialMovementService.create(essentialExpense),
+            );
 
-            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id!);
+            createdUser.financial_movements!.push(...financial_movements);
+
+            await userService.update(createdUser.id, createdUser);
+
+            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id);
         } catch (error) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(

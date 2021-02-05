@@ -1,6 +1,8 @@
 import { Router } from 'express';
 
 import * as SpendingDivisionController from '../controllers/SpendingDivisionController';
+import validatorMiddleware from '../utils/middlewares/validator';
+import { idSchema } from '../utils/validators/common';
 
 const router = Router();
 
@@ -14,9 +16,9 @@ const router = Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
+ *       - in: path
+ *         name: userId
+ *         type: uuid
  *         required: true
  *     responses:
  *       '200':
@@ -33,7 +35,13 @@ const router = Router();
  *           $ref: '#/definitions/NotFound'
  */
 
-router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
+router.get(
+    '/base/:id',
+    validatorMiddleware({
+        params: idSchema,
+    }),
+    SpendingDivisionController.getBaseSpendingDivision,
+);
 
 /**
  * @swagger
@@ -45,9 +53,9 @@ router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: header
- *         name: token
- *         type: string
+ *       - in: path
+ *         name: userId
+ *         type: uuid
  *         required: true
  *     responses:
  *       '200':
@@ -64,6 +72,12 @@ router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
  *           $ref: '#/definitions/NotFound'
  */
 
-router.get('/', SpendingDivisionController.getSpendingDivisionByUser);
+router.get(
+    '/:id',
+    validatorMiddleware({
+        params: idSchema,
+    }),
+    SpendingDivisionController.getSpendingDivisionByUser,
+);
 
 export default router;

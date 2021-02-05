@@ -3,16 +3,11 @@ import { v4 } from 'uuid';
 
 import User from '../../../database/entities/User';
 import { OptionsTypeOrmGetAll } from '../../../interfaces/pagination';
-import IFinancialMovementRepository from '../../../interfaces/repositories/IFinancialMovementRepository';
 import IUserRepository from '../../../interfaces/repositories/IUserRepository';
 import { UserInterface } from '../../../interfaces/UserInterface';
 
 export default class FakeUserRepository implements IUserRepository {
     private users: User[] = [];
-
-    constructor(
-        private fakeFinancialMovementRepository: IFinancialMovementRepository,
-    ) {}
 
     public async createAndSave(userData: UserInterface): Promise<User> {
         const user = Object.assign(new User(), userData);
@@ -27,16 +22,8 @@ export default class FakeUserRepository implements IUserRepository {
         return user;
     }
 
-    public async findById(user_id: string): Promise<User | undefined> {
-        const userFound = this.users.find(user => user.id === user_id);
-
-        if (userFound) {
-            const financialMovements = await this.fakeFinancialMovementRepository.getAll(
-                <any>{ where: { user_id } },
-            );
-
-            userFound.financial_movements = financialMovements.data;
-        }
+    public async findById(id: string): Promise<User | undefined> {
+        const userFound = this.users.find(user => user.id === id);
 
         return userFound;
     }

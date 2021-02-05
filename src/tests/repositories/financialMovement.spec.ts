@@ -18,7 +18,6 @@ describe('FinancialMovement context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
-            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -50,7 +49,6 @@ describe('FinancialMovement context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
-            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -88,7 +86,6 @@ describe('FinancialMovement context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
-            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -129,7 +126,6 @@ describe('FinancialMovement context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
-            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
@@ -160,7 +156,6 @@ describe('FinancialMovement context', () => {
         const user = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
-            .withPassword('123456')
             .withFinancialMovements([])
             .build();
 
