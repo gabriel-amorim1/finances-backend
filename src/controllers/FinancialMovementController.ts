@@ -7,11 +7,7 @@ import { getAllFinancialMovementSchema } from '../utils/financialMovement/valida
 
 export const create = async (req: Request, res: Response): Promise<Response> => {
     const financialMovementData = req.body;
-
-    let user_id = v4();
-    if (process.env.ENVIRONMENT === 'PRODUCTION') {
-        user_id = req.user.id;
-    }
+    const user_id = req.user.id;
 
     const financialMovementService = container.resolve(FinancialMovementService);
     const response = await financialMovementService.create({
@@ -35,13 +31,9 @@ export const getAll = async (req: Request, res: Response): Promise<Response> => 
     const query = (await getAllFinancialMovementSchema.validate(req.query, {
         stripUnknown: true,
     })) as FinancialMovementRequestGetAllInterface;
-    let user_id = v4();
-    if (process.env.ENVIRONMENT === 'PRODUCTION') {
-        user_id = req.user.id;
-    }
 
     const financialMovementService = container.resolve(FinancialMovementService);
-    const response = await financialMovementService.getAll(query, user_id);
+    const response = await financialMovementService.getAll(query, req.user.id);
 
     return res.status(200).json(response);
 };
