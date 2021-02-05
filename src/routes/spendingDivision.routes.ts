@@ -1,8 +1,6 @@
 import { Router } from 'express';
 
 import * as SpendingDivisionController from '../controllers/SpendingDivisionController';
-import validatorMiddleware from '../utils/middlewares/validator';
-import { idSchema } from '../utils/validators/common';
 
 const router = Router();
 
@@ -16,9 +14,9 @@ const router = Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: path
- *         name: userId
- *         type: uuid
+ *       - in: header
+ *         name: token
+ *         type: string
  *         required: true
  *     responses:
  *       '200':
@@ -47,9 +45,9 @@ router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
  *     produces:
  *       - application/json
  *     parameters:
- *       - in: path
- *         name: userId
- *         type: uuid
+ *       - in: header
+ *         name: token
+ *         type: string
  *         required: true
  *     responses:
  *       '200':
