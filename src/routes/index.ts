@@ -5,6 +5,8 @@ import { swaggerSpec } from '../swagger';
 import apiUser from './user.routes';
 import apiFinancialMovement from './financialMovement.routes';
 import apiSpendingDivision from './spendingDivision.routes';
+import apiSession from './session.routes';
+import authMiddleware from '../utils/middlewares/auth';
 
 const router = Router();
 
@@ -15,6 +17,8 @@ router.get('/', (req: Request, res: Response) => {
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 router.use('/api/user', apiUser);
+router.use('/api/sessions', apiSession);
+router.use(authMiddleware);
 router.use('/api/financial-movement', apiFinancialMovement);
 router.use('/api/spending-division', apiSpendingDivision);
 

@@ -16,9 +16,9 @@ describe('FinancialMovement Service', () => {
     let fakeFinancialMovementRepository: FakeFinancialMovementRepository;
 
     beforeEach(async () => {
-        fakeUserRepository = new FakeUserRepository();
-        userService = new UserService(fakeUserRepository);
         fakeFinancialMovementRepository = new FakeFinancialMovementRepository();
+        fakeUserRepository = new FakeUserRepository(fakeFinancialMovementRepository);
+        userService = new UserService(fakeUserRepository);
         financialMovementService = new FinancialMovementService(
             fakeFinancialMovementRepository,
             userService,
@@ -43,7 +43,7 @@ describe('FinancialMovement Service', () => {
         const financialMovement: FinancialMovementInterface = {
             id: v4(),
             name: 'Gabriel',
-            user_id: createdUser.id,
+            user_id: createdUser.id!,
             value: 123.01,
             classification: 'receita',
             created_at: new Date(),
@@ -68,7 +68,7 @@ describe('FinancialMovement Service', () => {
 
         const financialMovement: FinancialMovementInterface = {
             name: 'Gabriel',
-            user_id: createdUser.id,
+            user_id: createdUser.id!,
             value: 123.01,
             classification: 'receita',
         };
@@ -105,12 +105,22 @@ describe('FinancialMovement Service', () => {
             totalPages: 1,
         };
 
-        const res = await financialMovementService.getAll({});
+        const res = await financialMovementService.getAll({}, sut1.id);
 
         expect(res).toEqual(expectedRes);
     });
 
     it('should be able to get all FinancialMovement and return a empty array', async () => {
+        const user: UserInterface = {
+            id: v4(),
+            name: 'Gabriel',
+            email: 'gabriel@teste.com',
+            created_at: new Date(),
+            updated_at: new Date(),
+        };
+
+        const createdUser = await userService.create(Object.assign(user));
+
         const expectedRes = {
             data: [],
             count: 0,
@@ -119,7 +129,7 @@ describe('FinancialMovement Service', () => {
             totalPages: 0,
         };
 
-        const res = await financialMovementService.getAll({});
+        const res = await financialMovementService.getAll({}, createdUser.id!);
 
         expect(res).toEqual(expectedRes);
     });

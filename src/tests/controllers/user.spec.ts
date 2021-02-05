@@ -8,7 +8,7 @@ import UserService from '../../services/UserService';
 import { isParamsInValidationErrors } from '../../utils/errors/validationError';
 import UserBuilder from '../testBuilders/UserBuilder';
 
-describe('Sales Origin Route context', () => {
+describe('User Route context', () => {
     let userServiceSpy: sinon.SinonStubbedInstance<UserService>;
 
     beforeEach(() => {
@@ -20,6 +20,7 @@ describe('Sales Origin Route context', () => {
         const userData = new UserBuilder()
             .withName('Gabriel')
             .withEmail('gabriel@teste.com')
+            .withPassword('123456')
             .build();
 
         userServiceSpy.create.resolves(<any>userData);
@@ -42,6 +43,7 @@ describe('Sales Origin Route context', () => {
             errors: [
                 { property: 'name', message: 'name is a required field' },
                 { property: 'email', message: 'email is a required field' },
+                { property: 'password', message: 'password is a required field' },
             ],
         });
         expect(userServiceSpy.create.notCalled).toBeTruthy();

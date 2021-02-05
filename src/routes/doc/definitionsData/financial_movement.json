@@ -38,17 +38,11 @@
     },
     "FinancialMovementCreate": {
         "required": [
-            "user_id",
             "name",
             "value",
             "classification"
         ],
         "properties": {
-            "user_id": {
-                "type": "string",
-                "format": "uuid",
-                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
-            },
             "name": {
                 "type": "string",
                 "example": "salário"
@@ -66,11 +60,6 @@
     },
     "FinancialMovementUpdate": {
         "properties": {
-            "user_id": {
-                "type": "string",
-                "format": "uuid",
-                "example": "5b60b59e-5700-4069-bbf0-bba86c5cbafd"
-            },
             "name": {
                 "type": "string",
                 "example": "salário"

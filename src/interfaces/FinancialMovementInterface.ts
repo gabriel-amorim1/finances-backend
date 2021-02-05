@@ -15,7 +15,6 @@ export interface FinancialMovementInterface {
 
 export interface FinancialMovementRequestGetAllInterface
     extends RequestGetAllInterface {
-    user_id?: string;
     name?: string;
     value?: number;
     classification?: string;
