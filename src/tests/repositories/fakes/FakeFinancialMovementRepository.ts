@@ -44,6 +44,37 @@ export default class FakeFinancialMovementRepository
         return { data, count };
     }
 
+    public async getAllGroupByClassification(
+        user_id: string,
+    ): Promise<{ classification: string; inValue: number }[]> {
+        const classifications = [
+            'receita',
+            'gastos essenciais',
+            'gastos não essenciais',
+            'investimentos',
+            'torrar',
+        ];
+
+        const movementsGroups: { classification: string; inValue: number }[] = [];
+
+        classifications.forEach(classification => {
+            const filteredMovements = this.financialMovements.filter(
+                movement =>
+                    movement.user_id === user_id &&
+                    movement.classification === classification,
+            );
+            if (filteredMovements) {
+                const inValue = filteredMovements
+                    .map(mapMovement => mapMovement.value)
+                    .reduce((a, b) => a + b);
+
+                movementsGroups.push({ classification, inValue });
+            }
+        });
+
+        return movementsGroups;
+    }
+
     public async update(
         movementUpdate: FinancialMovement,
     ): Promise<FinancialMovement> {

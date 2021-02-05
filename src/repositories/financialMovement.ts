@@ -3,6 +3,7 @@ import FinancialMovement from '../database/entities/FinancialMovement';
 import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
 import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
+import { SpendingDivisionInterface } from '../interfaces/SpendingDivisionInterface';
 
 export default class FinancialMovementRepository
     implements IFinancialMovementRepository {
@@ -30,6 +31,28 @@ export default class FinancialMovementRepository
         const [data, count] = await this.ormRepository.findAndCount(options);
 
         return { data, count };
+    }
+
+    public async getAllGroupByClassification(
+        user_id: string,
+    ): Promise<
+        {
+            classification: string;
+            inValue: number;
+        }[]
+    > {
+        return this.ormRepository.query(
+            `SELECT
+                classification,
+                SUM (value) as inValue
+            FROM
+                financial_movements fm
+            WHERE
+                fm.user_id = '${user_id}'
+            GROUP BY
+                classification;
+            `,
+        );
     }
 
     public async update(

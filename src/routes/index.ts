@@ -18,7 +18,9 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 router.use('/api/user', apiUser);
 router.use('/api/sessions', apiSession);
-router.use(authMiddleware);
+if (process.env.ENVIRONMENT === 'PRODUCTION') {
+    router.use(authMiddleware);
+}
 router.use('/api/financial-movement', apiFinancialMovement);
 router.use('/api/spending-division', apiSpendingDivision);
 
