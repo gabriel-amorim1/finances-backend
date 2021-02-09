@@ -3,3 +3,4 @@ database.sqlite
 dist
 .env
 coverage
+ormconfig_to_use_sqlite.json
