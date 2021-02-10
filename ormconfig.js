@@ -7,11 +7,14 @@ module.exports = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    synchronize: false,
+    ssl: true,
     extra: {
-        ssl: true
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     entities: [process.env.TYPEORM_ENTITIES],
-    synchronize: false,
     migrationsTableName: 'migrations',
     migrations: [process.env.TYPEORM_MIGRATIONS],
     cli: {
