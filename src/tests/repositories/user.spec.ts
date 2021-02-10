@@ -6,7 +6,7 @@ describe('User context', () => {
     let userRepository: UserRepository;
 
     beforeAll(async () => {
-        await connect();
+        await connect(true);
         userRepository = new UserRepository();
     });
 

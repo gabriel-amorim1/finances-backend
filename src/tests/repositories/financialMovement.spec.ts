@@ -9,7 +9,7 @@ describe('FinancialMovement context', () => {
     let userRepository: UserRepository;
 
     beforeAll(async () => {
-        await connect();
+        await connect(true);
         userRepository = new UserRepository();
         financialMovementRepository = new FinancialMovementRepository();
     });
