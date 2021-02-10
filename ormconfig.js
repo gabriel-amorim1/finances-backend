@@ -7,11 +7,11 @@ module.exports = {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: ['src/database/entities/*.ts'],
+    entities: [process.env.TYPEORM_ENTITIES],
     synchronize: false,
     migrationsTableName: 'migrations',
-    migrations: ['src/database/migrations/*.ts'],
+    migrations: [process.env.TYPEORM_MIGRATIONS],
     cli: {
-        migrationsDir: 'src/database/migrations',
+        migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
     },
 };
