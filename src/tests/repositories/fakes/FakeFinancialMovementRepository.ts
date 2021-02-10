@@ -46,7 +46,7 @@ export default class FakeFinancialMovementRepository
 
     public async getAllGroupByClassification(
         user_id: string,
-    ): Promise<{ classification: string; inValue: number }[]> {
+    ): Promise<{ classification: string; in_value: number }[]> {
         const classifications = [
             'receita',
             'gastos essenciais',
@@ -55,7 +55,7 @@ export default class FakeFinancialMovementRepository
             'torrar',
         ];
 
-        const movementsGroups: { classification: string; inValue: number }[] = [];
+        const movementsGroups: { classification: string; in_value: number }[] = [];
 
         classifications.forEach(classification => {
             const filteredMovements = this.financialMovements.filter(
@@ -64,11 +64,11 @@ export default class FakeFinancialMovementRepository
                     movement.classification === classification,
             );
             if (filteredMovements) {
-                const inValue = filteredMovements
+                const in_value = filteredMovements
                     .map(mapMovement => mapMovement.value)
                     .reduce((a, b) => a + b);
 
-                movementsGroups.push({ classification, inValue });
+                movementsGroups.push({ classification, in_value });
             }
         });
 

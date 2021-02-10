@@ -8,7 +8,7 @@ import { calculatePercentage } from '../spendingDivision';
 export const buildSpendingDivision = (
     financialGroups: {
         classification: string;
-        inValue: number;
+        in_value: number;
     }[],
 ): SpendingDivisionInterface => {
     const incomeGroup = financialGroups.find(
@@ -16,8 +16,8 @@ export const buildSpendingDivision = (
     );
 
     const income = buildClassificationFormat(
-        incomeGroup!.inValue,
-        incomeGroup!.inValue,
+        incomeGroup!.in_value,
+        incomeGroup!.in_value,
     );
 
     const essentialExpensesGroup = financialGroups.find(
@@ -25,7 +25,7 @@ export const buildSpendingDivision = (
     );
     const essentialExpenses = buildClassificationFormat(
         income.inValue,
-        essentialExpensesGroup?.inValue,
+        essentialExpensesGroup?.in_value,
     );
 
     const nonEssentialExpensesGroup = financialGroups.find(
@@ -33,7 +33,7 @@ export const buildSpendingDivision = (
     );
     const nonEssentialExpenses = buildClassificationFormat(
         income.inValue,
-        nonEssentialExpensesGroup?.inValue,
+        nonEssentialExpensesGroup?.in_value,
     );
 
     const investmentsGroup = financialGroups.find(
@@ -41,13 +41,13 @@ export const buildSpendingDivision = (
     );
     const investments = buildClassificationFormat(
         income.inValue,
-        investmentsGroup?.inValue,
+        investmentsGroup?.in_value,
     );
 
     const wasteGroup = financialGroups.find(
         financial => financial.classification === 'torrar',
     );
-    const waste = buildClassificationFormat(income.inValue, wasteGroup?.inValue);
+    const waste = buildClassificationFormat(income.inValue, wasteGroup?.in_value);
 
     const remnant = {
         inPercentage: 0,

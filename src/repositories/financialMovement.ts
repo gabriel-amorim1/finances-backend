@@ -3,7 +3,6 @@ import FinancialMovement from '../database/entities/FinancialMovement';
 import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
 import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
-import { SpendingDivisionInterface } from '../interfaces/SpendingDivisionInterface';
 
 export default class FinancialMovementRepository
     implements IFinancialMovementRepository {
@@ -38,13 +37,13 @@ export default class FinancialMovementRepository
     ): Promise<
         {
             classification: string;
-            inValue: number;
+            in_value: number;
         }[]
     > {
         return this.ormRepository.query(
             `SELECT
                 classification,
-                SUM (value) as inValue
+                SUM (value) as in_value
             FROM
                 financial_movements fm
             WHERE

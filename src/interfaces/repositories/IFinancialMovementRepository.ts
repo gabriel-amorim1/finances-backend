@@ -16,7 +16,7 @@ export default interface IFinancialMovementRepository {
     ): Promise<
         {
             classification: string;
-            inValue: number;
+            in_value: number;
         }[]
     >;
     update(movementUpdate: FinancialMovement): Promise<FinancialMovement>;
