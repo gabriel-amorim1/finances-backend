@@ -49,99 +49,99 @@ describe('User Route context', () => {
         expect(userServiceSpy.create.notCalled).toBeTruthy();
     });
 
-    it('should be call controller findOne with id returns status 200', async () => {
-        const userId = uuidv4();
+    // it('should be call controller findOne with id returns status 200', async () => {
+    //     const userId = uuidv4();
 
-        userServiceSpy.findById.resolves(<any>'userData');
-        sinon.stub(container, 'resolve').returns(userServiceSpy);
+    //     userServiceSpy.findById.resolves(<any>'userData');
+    //     sinon.stub(container, 'resolve').returns(userServiceSpy);
 
-        const res = await request(app).get(`/api/user/${userId}`);
+    //     const res = await request(app).get(`/api/user/${userId}`);
 
-        expect(res.status).toBe(200);
-        expect(res.body).toStrictEqual('userData');
-        expect(userServiceSpy.findById.calledWithExactly(userId)).toBeTruthy();
-    });
+    //     expect(res.status).toBe(200);
+    //     expect(res.body).toStrictEqual('userData');
+    //     expect(userServiceSpy.findById.calledWithExactly(userId)).toBeTruthy();
+    // });
 
-    it('should be call controller findOne return status 400 when not send params', async () => {
-        const res = await request(app).get('/api/user/invalid');
+    // it('should be call controller findOne return status 400 when not send params', async () => {
+    //     const res = await request(app).get('/api/user/invalid');
 
-        expect(res.status).toBe(400);
-        expect(isParamsInValidationErrors(['id'], res.body.errors)).toBeTruthy();
-        expect(userServiceSpy.create.notCalled).toBeTruthy();
-    });
+    //     expect(res.status).toBe(400);
+    //     expect(isParamsInValidationErrors(['id'], res.body.errors)).toBeTruthy();
+    //     expect(userServiceSpy.create.notCalled).toBeTruthy();
+    // });
 
-    it('should be call controller getAll and returns status 200', async () => {
-        userServiceSpy.getAll.resolves(<any>{ data: 'users', count: 2 });
-        sinon.stub(container, 'resolve').returns(userServiceSpy);
+    // it('should be call controller getAll and returns status 200', async () => {
+    //     userServiceSpy.getAll.resolves(<any>{ data: 'users', count: 2 });
+    //     sinon.stub(container, 'resolve').returns(userServiceSpy);
 
-        const res = await request(app).get(`/api/user`);
+    //     const res = await request(app).get(`/api/user`);
 
-        expect(res.status).toBe(200);
-        expect(res.body).toStrictEqual(<any>{ data: 'users', count: 2 });
-        expect(userServiceSpy.getAll.calledWithExactly({})).toBeTruthy();
-    });
+    //     expect(res.status).toBe(200);
+    //     expect(res.body).toStrictEqual(<any>{ data: 'users', count: 2 });
+    //     expect(userServiceSpy.getAll.calledWithExactly({})).toBeTruthy();
+    // });
 
-    it('should be call update controller with user data and returns status 201', async () => {
-        const id = v4();
-        const userData = new UserBuilder()
-            .withName('Gabriel')
-            .withEmail('gabriel@update.com')
-            .build();
+    // it('should be call update controller with user data and returns status 201', async () => {
+    //     const id = v4();
+    //     const userData = new UserBuilder()
+    //         .withName('Gabriel')
+    //         .withEmail('gabriel@update.com')
+    //         .build();
 
-        userServiceSpy.update.resolves(<any>userData);
-        sinon.stub(container, 'resolve').returns(userServiceSpy);
+    //     userServiceSpy.update.resolves(<any>userData);
+    //     sinon.stub(container, 'resolve').returns(userServiceSpy);
 
-        const res = await request(app).put(`/api/user/${id}`).send(userData);
+    //     const res = await request(app).put(`/api/user/${id}`).send(userData);
 
-        expect(res.status).toBe(200);
-        expect(res.body).toStrictEqual(userData);
-        expect(userServiceSpy.update.calledWithExactly(id, userData)).toBeTruthy();
-    });
+    //     expect(res.status).toBe(200);
+    //     expect(res.body).toStrictEqual(userData);
+    //     expect(userServiceSpy.update.calledWithExactly(id, userData)).toBeTruthy();
+    // });
 
-    it('should not call update controller and return status 400 when send invalid id', async () => {
-        const res = await request(app).put('/api/user/invalid');
+    // it('should not call update controller and return status 400 when send invalid id', async () => {
+    //     const res = await request(app).put('/api/user/invalid');
 
-        expect(res.status).toBe(400);
-        expect(res.body).toEqual({
-            code: 400,
-            message: 'Validation Error',
-            errors: [
-                {
-                    property: 'id',
-                    message: 'id must be a valid UUID',
-                },
-            ],
-        });
-        expect(userServiceSpy.update.notCalled).toBeTruthy();
-    });
+    //     expect(res.status).toBe(400);
+    //     expect(res.body).toEqual({
+    //         code: 400,
+    //         message: 'Validation Error',
+    //         errors: [
+    //             {
+    //                 property: 'id',
+    //                 message: 'id must be a valid UUID',
+    //             },
+    //         ],
+    //     });
+    //     expect(userServiceSpy.update.notCalled).toBeTruthy();
+    // });
 
-    it('should be call remove controller with user data and returns status 204', async () => {
-        const id = v4();
+    // it('should be call remove controller with user data and returns status 204', async () => {
+    //     const id = v4();
 
-        userServiceSpy.remove.resolves();
-        sinon.stub(container, 'resolve').returns(userServiceSpy);
+    //     userServiceSpy.remove.resolves();
+    //     sinon.stub(container, 'resolve').returns(userServiceSpy);
 
-        const res = await request(app).delete(`/api/user/${id}`);
+    //     const res = await request(app).delete(`/api/user/${id}`);
 
-        expect(res.status).toBe(204);
-        expect(res.body).toStrictEqual({});
-        expect(userServiceSpy.remove.calledWithExactly(id)).toBeTruthy();
-    });
+    //     expect(res.status).toBe(204);
+    //     expect(res.body).toStrictEqual({});
+    //     expect(userServiceSpy.remove.calledWithExactly(id)).toBeTruthy();
+    // });
 
-    it('should not call remove controller and return status 400 when send invalid id', async () => {
-        const res = await request(app).delete('/api/user/invalid');
+    // it('should not call remove controller and return status 400 when send invalid id', async () => {
+    //     const res = await request(app).delete('/api/user/invalid');
 
-        expect(res.status).toBe(400);
-        expect(res.body).toEqual({
-            code: 400,
-            message: 'Validation Error',
-            errors: [
-                {
-                    property: 'id',
-                    message: 'id must be a valid UUID',
-                },
-            ],
-        });
-        expect(userServiceSpy.remove.notCalled).toBeTruthy();
-    });
+    //     expect(res.status).toBe(400);
+    //     expect(res.body).toEqual({
+    //         code: 400,
+    //         message: 'Validation Error',
+    //         errors: [
+    //             {
+    //                 property: 'id',
+    //                 message: 'id must be a valid UUID',
+    //             },
+    //         ],
+    //     });
+    //     expect(userServiceSpy.remove.notCalled).toBeTruthy();
+    // });
 });

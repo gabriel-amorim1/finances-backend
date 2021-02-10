@@ -71,13 +71,13 @@ router.post(
  *           $ref: '#/definitions/NotFound'
  */
 
-router.get(
-    '/:id',
-    validatorMiddleware({
-        params: idSchema,
-    }),
-    UserController.findById,
-);
+// router.get(
+//     '/:id',
+//     validatorMiddleware({
+//         params: idSchema,
+//     }),
+//     UserController.findById,
+// );
 
 /**
  * @swagger
@@ -126,7 +126,7 @@ router.get(
  *           $ref: '#/definitions/UserGetAll'
  */
 
-router.get('/', UserController.getAll);
+// router.get('/', UserController.getAll);
 
 /**
  * @swagger
@@ -163,14 +163,14 @@ router.get('/', UserController.getAll);
  *           $ref: '#/definitions/NotFound'
  */
 
-router.put(
-    '/:id',
-    validatorMiddleware({
-        params: idSchema,
-        body: updateUserSchema,
-    }),
-    UserController.update,
-);
+// router.put(
+//     '/:id',
+//     validatorMiddleware({
+//         params: idSchema,
+//         body: updateUserSchema,
+//     }),
+//     UserController.update,
+// );
 
 /**
  * @swagger
@@ -199,12 +199,12 @@ router.put(
  *           $ref: '#/definitions/NotFound'
  */
 
-router.delete(
-    '/:id',
-    validatorMiddleware({
-        params: idSchema,
-    }),
-    UserController.remove,
-);
+// router.delete(
+//     '/:id',
+//     validatorMiddleware({
+//         params: idSchema,
+//     }),
+//     UserController.remove,
+// );
 
 export default router;
