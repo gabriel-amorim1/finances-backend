@@ -27,7 +27,7 @@ describe('Financial Movement Route context', () => {
         const movementData = new FinancialMovementBuilder()
             .withName('Gabriel')
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         financialMovementServiceSpy.create.resolves(<any>movementData);
@@ -106,7 +106,7 @@ describe('Financial Movement Route context', () => {
             .withName('Gabriel')
             .withUserId(v4())
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         financialMovementServiceSpy.update.resolves(<any>movementData);

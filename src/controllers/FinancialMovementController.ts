@@ -1,6 +1,5 @@
 import { Response, Request } from 'express';
 import { container } from 'tsyringe';
-import { v4 } from 'uuid';
 import { FinancialMovementRequestGetAllInterface } from '../interfaces/FinancialMovementInterface';
 import FinancialMovementService from '../services/FinancialMovementService';
 import { getAllFinancialMovementSchema } from '../utils/financialMovement/validators';

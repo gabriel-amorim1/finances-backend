@@ -21,8 +21,8 @@
             },
             "classification": {
                 "type": "string",
-                "enum": ["receita", "gastos essenciais", "gastos não essenciais", "investimentos", "torrar"],
-                "example": "receita"
+                "enum": ["RECEITAS", "GASTOS ESSENCIAIS", "GASTOS NAO ESSENCIAIS", "INVESTIMENTOS", "GASTOS LIVRES"],
+                "example": "RECEITAS"
             },
             "created_at": {
                 "type": "string",
@@ -53,8 +53,8 @@
             },
             "classification": {
                 "type": "string",
-                "enum": ["receita", "gastos essenciais", "gastos não essenciais", "investimentos", "torrar"],
-                "example": "receita"
+                "enum": ["RECEITAS", "GASTOS ESSENCIAIS", "GASTOS NAO ESSENCIAIS", "INVESTIMENTOS", "GASTOS LIVRES"],
+                "example": "RECEITAS"
             }
         }
     },
@@ -70,8 +70,8 @@
             },
             "classification": {
                 "type": "string",
-                "enum": ["receita", "gastos essenciais", "gastos não essenciais", "investimentos", "torrar"],
-                "example": "receita"
+                "enum": ["RECEITAS", "GASTOS ESSENCIAIS", "GASTOS NAO ESSENCIAIS", "INVESTIMENTOS", "GASTOS LIVRES"],
+                "example": "RECEITAS"
             }
         }
     },

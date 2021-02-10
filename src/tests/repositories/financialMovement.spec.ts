@@ -28,7 +28,7 @@ describe('FinancialMovement context', () => {
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const {
@@ -60,7 +60,7 @@ describe('FinancialMovement context', () => {
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const createdFinancialMovement = await financialMovementRepository.createAndSave(
@@ -98,14 +98,14 @@ describe('FinancialMovement context', () => {
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const movement2 = new FinancialMovementBuilder()
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const { id: id1 } = await financialMovementRepository.createAndSave(
@@ -139,7 +139,7 @@ describe('FinancialMovement context', () => {
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const createdMovement = await financialMovementRepository.createAndSave(
@@ -170,7 +170,7 @@ describe('FinancialMovement context', () => {
             .withName('Gabriel')
             .withUserId(createdUser.id)
             .withValue(123.01)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .build();
 
         const createdMovement = await financialMovementRepository.createAndSave(

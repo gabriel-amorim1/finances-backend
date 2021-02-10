@@ -7,11 +7,11 @@ export const createFinancialMovementSchema = yup.object().shape({
     classification: yup
         .string()
         .oneOf([
-            'receita',
-            'gastos essenciais',
-            'gastos não essenciais',
-            'investimentos',
-            'torrar',
+            'RECEITAS',
+            'GASTOS ESSENCIAIS',
+            'GASTOS NAO ESSENCIAIS',
+            'INVESTIMENTOS',
+            'GASTOS LIVRES',
         ])
         .strict(true)
         .required('The property classification is required'),
@@ -23,11 +23,11 @@ export const updateFinancialMovementSchema = yup.object().shape({
     classification: yup
         .string()
         .oneOf([
-            'receita',
-            'gastos essenciais',
-            'gastos não essenciais',
-            'investimentos',
-            'torrar',
+            'RECEITAS',
+            'GASTOS ESSENCIAIS',
+            'GASTOS NAO ESSENCIAIS',
+            'INVESTIMENTOS',
+            'GASTOS LIVRES',
         ])
         .strict(true)
         .optional(),
@@ -39,11 +39,11 @@ export const getAllFinancialMovementSchema = yup.object().shape({
     classification: yup
         .string()
         .oneOf([
-            'receita',
-            'gastos essenciais',
-            'gastos não essenciais',
-            'investimentos',
-            'torrar',
+            'RECEITAS',
+            'GASTOS ESSENCIAIS',
+            'GASTOS NAO ESSENCIAIS',
+            'INVESTIMENTOS',
+            'GASTOS LIVRES',
         ])
         .strict(true)
         .optional(),

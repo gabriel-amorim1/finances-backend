@@ -30,13 +30,13 @@ class SpendingDivisionService {
         }
 
         const incomes = user.financial_movements
-            .filter(movement => movement.classification === 'receita')
+            .filter(movement => movement.classification === 'RECEITAS')
             .map(movement => movement.value);
 
         if (incomes.length <= 0) {
             throw new HttpError(
                 400,
-                'This User has no financial movements as "receita" registered yet.',
+                'This User has no financial movements as "RECEITAS" registered yet.',
             );
         }
         const income = {
@@ -91,13 +91,13 @@ class SpendingDivisionService {
         }
 
         const incomesRegistered = user.financial_movements.filter(
-            movement => movement.classification === 'receita',
+            movement => movement.classification === 'RECEITAS',
         );
 
         if (incomesRegistered.length <= 0) {
             throw new HttpError(
                 400,
-                'This User has no financial movements as "receita" registered yet.',
+                'This User has no financial movements as "RECEITAS" registered yet.',
             );
         }
 
@@ -117,19 +117,19 @@ class SpendingDivisionService {
         income.financial_movements = incomesRegistered;
 
         essentialExpenses.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'gastos essenciais',
+            movement => movement.classification === 'GASTOS ESSENCIAIS',
         );
 
         nonEssentialExpenses.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'gastos não essenciais',
+            movement => movement.classification === 'GASTOS NAO ESSENCIAIS',
         );
 
         investments.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'investimentos',
+            movement => movement.classification === 'INVESTIMENTOS',
         );
 
         waste.financial_movements = user.financial_movements.filter(
-            movement => movement.classification === 'torrar',
+            movement => movement.classification === 'GASTOS LIVRES',
         );
 
         remnant.inValue =

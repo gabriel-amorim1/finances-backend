@@ -12,7 +12,7 @@ export const buildSpendingDivision = (
     }[],
 ): SpendingDivisionInterface => {
     const incomeGroup = financialGroups.find(
-        financial => financial.classification === 'receita',
+        financial => financial.classification === 'RECEITAS',
     );
 
     const income = buildClassificationFormat(
@@ -21,7 +21,7 @@ export const buildSpendingDivision = (
     );
 
     const essentialExpensesGroup = financialGroups.find(
-        financial => financial.classification === 'gastos essenciais',
+        financial => financial.classification === 'GASTOS ESSENCIAIS',
     );
     const essentialExpenses = buildClassificationFormat(
         income.inValue,
@@ -29,7 +29,7 @@ export const buildSpendingDivision = (
     );
 
     const nonEssentialExpensesGroup = financialGroups.find(
-        financial => financial.classification === 'gastos não essenciais',
+        financial => financial.classification === 'GASTOS NAO ESSENCIAIS',
     );
     const nonEssentialExpenses = buildClassificationFormat(
         income.inValue,
@@ -37,7 +37,7 @@ export const buildSpendingDivision = (
     );
 
     const investmentsGroup = financialGroups.find(
-        financial => financial.classification === 'investimentos',
+        financial => financial.classification === 'INVESTIMENTOS',
     );
     const investments = buildClassificationFormat(
         income.inValue,
@@ -45,7 +45,7 @@ export const buildSpendingDivision = (
     );
 
     const wasteGroup = financialGroups.find(
-        financial => financial.classification === 'torrar',
+        financial => financial.classification === 'GASTOS LIVRES',
     );
     const waste = buildClassificationFormat(income.inValue, wasteGroup?.in_value);
 

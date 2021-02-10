@@ -48,11 +48,11 @@ export default class FakeFinancialMovementRepository
         user_id: string,
     ): Promise<{ classification: string; in_value: number }[]> {
         const classifications = [
-            'receita',
-            'gastos essenciais',
-            'gastos não essenciais',
-            'investimentos',
-            'torrar',
+            'RECEITAS',
+            'GASTOS ESSENCIAIS',
+            'GASTOS NAO ESSENCIAIS',
+            'INVESTIMENTOS',
+            'GASTOS LIVRES',
         ];
 
         const movementsGroups: { classification: string; in_value: number }[] = [];

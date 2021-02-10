@@ -43,7 +43,7 @@ describe('Spending Division Service', () => {
 
         const income = new FinancialMovementBuilder()
             .withUserId(createdUser.id!)
-            .withClassification('receita')
+            .withClassification('RECEITAS')
             .withName('Salário')
             .withValue(15000)
             .build();
@@ -52,7 +52,7 @@ describe('Spending Division Service', () => {
 
         const essentialExpense = new FinancialMovementBuilder()
             .withUserId(createdUser.id!)
-            .withClassification('gastos essenciais')
+            .withClassification('GASTOS ESSENCIAIS')
             .withName('Despesas Domésticas')
             .withValue(5000)
             .build();
@@ -61,7 +61,7 @@ describe('Spending Division Service', () => {
 
         const nonEssentialExpense = new FinancialMovementBuilder()
             .withUserId(createdUser.id!)
-            .withClassification('gastos não essenciais')
+            .withClassification('GASTOS NAO ESSENCIAIS')
             .withName('Academia')
             .withValue(500)
             .build();
@@ -70,7 +70,7 @@ describe('Spending Division Service', () => {
 
         const investment = new FinancialMovementBuilder()
             .withUserId(createdUser.id!)
-            .withClassification('investimentos')
+            .withClassification('INVESTIMENTOS')
             .withName('CDB Banco Inter')
             .withValue(1000)
             .build();
@@ -79,7 +79,7 @@ describe('Spending Division Service', () => {
 
         const waste = new FinancialMovementBuilder()
             .withUserId(createdUser.id!)
-            .withClassification('torrar')
+            .withClassification('GASTOS LIVRES')
             .withName('Rolês')
             .withValue(3000)
             .build();
@@ -141,7 +141,7 @@ describe('Spending Division Service', () => {
                 financial_movements: [
                     {
                         user_id: user.id,
-                        classification: 'receita',
+                        classification: 'RECEITAS',
                         name: 'Salário',
                         value: 15000,
                         id: res.income.financial_movements![0].id,
@@ -156,7 +156,7 @@ describe('Spending Division Service', () => {
                 financial_movements: [
                     {
                         user_id: user.id,
-                        classification: 'gastos essenciais',
+                        classification: 'GASTOS ESSENCIAIS',
                         name: 'Despesas Domésticas',
                         value: 5000,
                         id: res.essentialExpenses.financial_movements![0].id,
@@ -173,7 +173,7 @@ describe('Spending Division Service', () => {
                 financial_movements: [
                     {
                         user_id: user.id,
-                        classification: 'gastos não essenciais',
+                        classification: 'GASTOS NAO ESSENCIAIS',
                         name: 'Academia',
                         value: 500,
                         id: res.nonEssentialExpenses.financial_movements![0].id,
@@ -190,7 +190,7 @@ describe('Spending Division Service', () => {
                 financial_movements: [
                     {
                         user_id: user.id,
-                        classification: 'investimentos',
+                        classification: 'INVESTIMENTOS',
                         name: 'CDB Banco Inter',
                         value: 1000,
                         id: res.investments.financial_movements![0].id,
@@ -207,7 +207,7 @@ describe('Spending Division Service', () => {
                 financial_movements: [
                     {
                         user_id: user.id,
-                        classification: 'torrar',
+                        classification: 'GASTOS LIVRES',
                         name: 'Rolês',
                         value: 3000,
                         id: res.waste.financial_movements![0].id,
@@ -246,7 +246,7 @@ describe('Spending Division Service', () => {
         }
     });
 
-    it('getSpendingDivisionByUser - This User has no financial movements as "receita" registered yet.', async () => {
+    it('getSpendingDivisionByUser - This User has no financial movements as "RECEITAS" registered yet.', async () => {
         expect.hasAssertions();
 
         try {
@@ -271,7 +271,7 @@ describe('Spending Division Service', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
-                'This User has no financial movements as "receita" registered yet.',
+                'This User has no financial movements as "RECEITAS" registered yet.',
             );
         }
     });

@@ -45,7 +45,7 @@ describe('FinancialMovement Service', () => {
             name: 'Gabriel',
             user_id: createdUser.id!,
             value: 123.01,
-            classification: 'receita',
+            classification: 'RECEITAS',
             created_at: new Date(),
             updated_at: new Date(),
         };
@@ -70,7 +70,7 @@ describe('FinancialMovement Service', () => {
             name: 'Gabriel',
             user_id: createdUser.id!,
             value: 123.01,
-            classification: 'receita',
+            classification: 'RECEITAS',
         };
 
         const res = await financialMovementService.create(financialMovement);
