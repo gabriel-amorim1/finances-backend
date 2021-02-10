@@ -2,11 +2,11 @@ import connect from '../../database/connection';
 import UserRepository from '../../repositories/user';
 import UserBuilder from '../testBuilders/UserBuilder';
 
-describe('User context', () => {
+describe.skip('User context', () => {
     let userRepository: UserRepository;
 
     beforeAll(async () => {
-        await connect(true);
+        await connect();
         userRepository = new UserRepository();
     });
 
