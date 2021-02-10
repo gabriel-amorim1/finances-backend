@@ -11,7 +11,7 @@ import authMiddleware from '../utils/middlewares/auth';
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
-    res.send('Service 1.0.0');
+    res.send('Go To Million Service 1.0.0');
 });
 
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
