@@ -26,9 +26,7 @@ export const dynamicFilter = <T>(
     for (const [key, value] of queryDataEntries) {
         query = {
             ...query,
-            // TODO ilike não funciona no sqlite
-            // [key]: Raw(alias => `CAST(${alias} AS VARCHAR) ILIKE '%${value}%'`),
-            [key]: Raw(alias => `CAST(${alias} AS VARCHAR) LIKE '%${value}%'`),
+            [key]: Raw(alias => `CAST(${alias} AS VARCHAR) ILIKE '%${value}%'`),
         };
     }
     if (user_id) query.user_id = user_id;
