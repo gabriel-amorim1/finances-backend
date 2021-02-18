@@ -12,7 +12,7 @@ describe('Financial Movement Route context', () => {
     let financialMovementServiceSpy: sinon.SinonStubbedInstance<FinancialMovementService>;
 
     beforeEach(() => {
-        process.env.ENVIRONMENT = 'DEV';
+        process.env.ENVIRONMENT = 'TESTING';
         sinon.restore();
         financialMovementServiceSpy = sinon.createStubInstance(
             FinancialMovementService,

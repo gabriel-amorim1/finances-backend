@@ -11,7 +11,7 @@ describe('Spending Division Route context', () => {
     let spendingDivisionServiceSpy: sinon.SinonStubbedInstance<SpendingDivisionService>;
 
     beforeEach(() => {
-        process.env.ENVIRONMENT = 'DEV';
+        process.env.ENVIRONMENT = 'TESTING';
         sinon.restore();
         spendingDivisionServiceSpy = sinon.createStubInstance(
             SpendingDivisionService,
