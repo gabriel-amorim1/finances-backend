@@ -1,5 +1,6 @@
 import { FinancialMovementInterface } from './FinancialMovementInterface';
 import { RequestGetAllInterface } from './pagination';
+import { SpendingDivisionBaseInterface } from './SpendingDivisionBaseInterface';
 
 export interface UserInterface {
     name: string;
@@ -11,6 +12,7 @@ export interface UserInterface {
     password?: string;
     password_hash?: string;
     financial_movements?: FinancialMovementInterface[];
+    spending_division_base?: SpendingDivisionBaseInterface;
 }
 
 export interface UserRequestGetAllInterface extends RequestGetAllInterface {

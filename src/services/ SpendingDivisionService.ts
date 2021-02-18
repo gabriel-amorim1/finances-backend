@@ -1,5 +1,8 @@
 import { inject, injectable } from 'tsyringe';
+import SpendingDivisionBase from '../database/entities/SpendingDivisionBase';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
+import ISpendingDivisionBaseRepository from '../interfaces/repositories/ISpendingDivisionBaseRepository';
+import { SpendingDivisionBaseInterface } from '../interfaces/SpendingDivisionBaseInterface';
 
 import { SpendingDivisionInterface } from '../interfaces/SpendingDivisionInterface';
 import { buildSpendingDivision } from '../utils/builders/spendingDivision';
@@ -10,12 +13,48 @@ import UserService from './UserService';
 @injectable()
 class SpendingDivisionService {
     constructor(
+        @inject('SpendingDivisionBaseRepository')
+        private spendingDivisionBaseRepository: ISpendingDivisionBaseRepository,
+
         @inject('UserService')
         private userService: UserService,
 
         @inject('FinancialMovementRepository')
         private financialMovementRepository: IFinancialMovementRepository,
     ) {}
+
+    public async create(
+        spendingDivisionBaseData: SpendingDivisionBaseInterface,
+    ): Promise<SpendingDivisionBase> {
+        await this.userService.findById(spendingDivisionBaseData.user_id);
+
+        return this.spendingDivisionBaseRepository.createAndSave(
+            spendingDivisionBaseData,
+        );
+    }
+
+    public async update(
+        spendingDivisionBaseUpdate: SpendingDivisionBaseInterface,
+    ): Promise<SpendingDivisionBase> {
+        await this.userService.findById(spendingDivisionBaseUpdate.user_id);
+
+        const foundSpendingDivisionBase = await this.spendingDivisionBaseRepository.findByUserId(
+            spendingDivisionBaseUpdate.user_id,
+        );
+
+        if (!foundSpendingDivisionBase) {
+            throw new HttpError(
+                404,
+                'This User has no spending division base registered yet.',
+            );
+        }
+
+        return this.spendingDivisionBaseRepository.update(
+            Object.assign(foundSpendingDivisionBase, {
+                ...spendingDivisionBaseUpdate,
+            }),
+        );
+    }
 
     public async getBaseSpendingDivision(
         userId: string,
@@ -39,6 +78,21 @@ class SpendingDivisionService {
                 'This User has no financial movements as "RECEITAS" registered yet.',
             );
         }
+
+        let spendingDivisionBase = await this.spendingDivisionBaseRepository.findByUserId(
+            userId,
+        );
+
+        if (!spendingDivisionBase) {
+            spendingDivisionBase = await this.create(<SpendingDivisionBaseInterface>{
+                user_id: userId,
+                essential_expenses: 0.5,
+                non_essential_expenses: 0.1,
+                wastes: 0.1,
+                investments: 0.3,
+            });
+        }
+
         const income = {
             inPercentage: 1,
             inValue: incomes.reduce(
@@ -47,25 +101,43 @@ class SpendingDivisionService {
         };
 
         const essentialExpenses = {
-            inPercentage: 0.5,
-            inValue: Math.round(income.inValue * 0.5 * 100) / 100,
+            inPercentage: spendingDivisionBase.essential_expenses,
+            inValue:
+                Math.round(
+                    income.inValue * spendingDivisionBase.essential_expenses * 100,
+                ) / 100,
         };
         const nonEssentialExpenses = {
-            inPercentage: 0.1,
-            inValue: Math.round(income.inValue * 0.1 * 100) / 100,
+            inPercentage: spendingDivisionBase.non_essential_expenses,
+            inValue:
+                Math.round(
+                    income.inValue *
+                        spendingDivisionBase.non_essential_expenses *
+                        100,
+                ) / 100,
         };
         const investments = {
-            inPercentage: 0.3,
-            inValue: Math.round(income.inValue * 0.3 * 100) / 100,
+            inPercentage: spendingDivisionBase.investments,
+            inValue:
+                Math.round(income.inValue * spendingDivisionBase.investments * 100) /
+                100,
         };
         const waste = {
-            inPercentage: 0.1,
-            inValue: Math.round(income.inValue * 0.1 * 100) / 100,
+            inPercentage: spendingDivisionBase.wastes,
+            inValue:
+                Math.round(income.inValue * spendingDivisionBase.wastes * 100) / 100,
         };
 
+        const remnantInValue =
+            income.inValue -
+            essentialExpenses.inValue -
+            nonEssentialExpenses.inValue -
+            investments.inValue -
+            waste.inValue;
+
         const remnant = {
-            inPercentage: 0,
-            inValue: 0,
+            inPercentage: calculatePercentage(income.inValue, remnantInValue),
+            inValue: remnantInValue,
         };
 
         return {

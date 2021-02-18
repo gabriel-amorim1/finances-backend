@@ -1,6 +1,5 @@
 import { v4 } from 'uuid';
 import FinancialMovementService from '../../services/FinancialMovementService';
-import FinancialMovement from '../../database/entities/FinancialMovement';
 import FakeFinancialMovementRepository from '../repositories/fakes/FakeFinancialMovementRepository';
 import UserService from '../../services/UserService';
 import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
@@ -9,6 +8,7 @@ import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
 import UserBuilder from '../testBuilders/UserBuilder';
 import { HttpError } from '../../utils/errors/HttpError';
 import { UserInterface } from '../../interfaces/UserInterface';
+import FakeSpendingDivisionBaseRepository from '../repositories/fakes/FakeSpendingDivisionBaseRepository';
 
 describe('Spending Division Service', () => {
     let financialMovementService: FinancialMovementService;
@@ -16,9 +16,11 @@ describe('Spending Division Service', () => {
     let spendingDivisionService: SpendingDivisionService;
     let fakeUserRepository: FakeUserRepository;
     let fakeFinancialMovementRepository: FakeFinancialMovementRepository;
+    let fakeSpendingDivisionBaseRepository: FakeSpendingDivisionBaseRepository;
 
     beforeEach(async () => {
         fakeFinancialMovementRepository = new FakeFinancialMovementRepository();
+        fakeSpendingDivisionBaseRepository = new FakeSpendingDivisionBaseRepository();
         fakeUserRepository = new FakeUserRepository(fakeFinancialMovementRepository);
         userService = new UserService(fakeUserRepository);
         financialMovementService = new FinancialMovementService(
@@ -26,6 +28,7 @@ describe('Spending Division Service', () => {
             userService,
         );
         spendingDivisionService = new SpendingDivisionService(
+            fakeSpendingDivisionBaseRepository,
             userService,
             fakeFinancialMovementRepository,
         );
@@ -89,6 +92,112 @@ describe('Spending Division Service', () => {
         return userService.findById(createdUser.id!);
     };
 
+    it('should create spending division base by user', async () => {
+        const user = await makeSut();
+
+        const {
+            id,
+            created_at,
+            updated_at,
+            ...entityProps
+        } = await spendingDivisionService.create({
+            user_id: user.id!,
+            essential_expenses: 0.5,
+            non_essential_expenses: 0.1,
+            investments: 0.3,
+            wastes: 0.1,
+        });
+
+        const expectedRes = {
+            essential_expenses: 0.5,
+            investments: 0.3,
+            non_essential_expenses: 0.1,
+            user_id: user.id,
+            wastes: 0.1,
+        };
+
+        expect(entityProps).toEqual(expectedRes);
+        expect(id).not.toBeUndefined();
+        expect(created_at).not.toBeUndefined();
+        expect(updated_at).not.toBeUndefined();
+    });
+
+    it('should not create spending division base by user - User not found', async () => {
+        expect.hasAssertions();
+
+        try {
+            await spendingDivisionService.create({
+                user_id: v4(),
+                essential_expenses: 0.5,
+                non_essential_expenses: 0.1,
+                investments: 0.3,
+                wastes: 0.1,
+            });
+        } catch (error) {
+            expect(error).toBeInstanceOf(HttpError);
+            expect(error.message).toBe('User not found');
+        }
+    });
+
+    it('should update spending division base by user', async () => {
+        const user = await makeSut();
+
+        const createdSpendingDivisionBase = await spendingDivisionService.create({
+            user_id: user.id!,
+            essential_expenses: 0.5,
+            non_essential_expenses: 0.1,
+            investments: 0.3,
+            wastes: 0.1,
+        });
+
+        createdSpendingDivisionBase.essential_expenses = 0.3;
+        createdSpendingDivisionBase.investments = 0.5;
+
+        const res = await spendingDivisionService.update(
+            createdSpendingDivisionBase,
+        );
+
+        expect(res).toEqual(createdSpendingDivisionBase);
+    });
+
+    it('should not update spending division base by user - This User has no spending division base registered yet.', async () => {
+        expect.hasAssertions();
+
+        try {
+            const user = await makeSut();
+
+            await spendingDivisionService.update({
+                user_id: user.id!,
+                essential_expenses: 0.5,
+                non_essential_expenses: 0.1,
+                investments: 0.3,
+                wastes: 0.1,
+            });
+        } catch (error) {
+            expect(error).toBeInstanceOf(HttpError);
+            expect(error.message).toBe(
+                'This User has no spending division base registered yet.',
+            );
+        }
+    });
+
+    it('should not update spending division base by user - User not found', async () => {
+        expect.hasAssertions();
+
+        try {
+            await spendingDivisionService.update({
+                user_id: v4(),
+                essential_expenses: 0.5,
+                non_essential_expenses: 0.1,
+                investments: 0.3,
+                wastes: 0.1,
+            });
+        } catch (error) {
+            expect(error).toBeInstanceOf(HttpError);
+            expect(error.message).toBe('User not found');
+        }
+    });
+
     it('should return base spending by user', async () => {
         const user = await makeSut();
 
@@ -99,6 +208,36 @@ describe('Spending Division Service', () => {
             essentialExpenses: { inPercentage: 0.5, inValue: 7500 },
             nonEssentialExpenses: { inPercentage: 0.1, inValue: 1500 },
             investments: { inPercentage: 0.3, inValue: 4500 },
+            waste: { inPercentage: 0.1, inValue: 1500 },
+            remnant: { inPercentage: 0, inValue: 0 },
+        };
+
+        expect(res).toEqual(expectedRes);
+    });
+
+    it('should return base spending by user that was updated', async () => {
+        const user = await makeSut();
+
+        const createdSpendingDivisionBase = await spendingDivisionService.create({
+            user_id: user.id!,
+            essential_expenses: 0.5,
+            non_essential_expenses: 0.1,
+            investments: 0.3,
+            wastes: 0.1,
+        });
+
+        createdSpendingDivisionBase.essential_expenses = 0.3;
+        createdSpendingDivisionBase.investments = 0.5;
+
+        await spendingDivisionService.update(createdSpendingDivisionBase);
+
+        const res = await spendingDivisionService.getBaseSpendingDivision(user.id!);
+
+        const expectedRes = {
+            income: { inPercentage: 1, inValue: 15000 },
+            essentialExpenses: { inPercentage: 0.3, inValue: 4500 },
+            nonEssentialExpenses: { inPercentage: 0.1, inValue: 1500 },
+            investments: { inPercentage: 0.5, inValue: 7500 },
             waste: { inPercentage: 0.1, inValue: 1500 },
             remnant: { inPercentage: 0, inValue: 0 },
         };

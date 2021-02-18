@@ -24,9 +24,7 @@ class FinancialMovementService {
     public async create(
         movementData: FinancialMovementInterface,
     ): Promise<FinancialMovement> {
-        if (!(await this.userService.findById(movementData.user_id))) {
-            throw new HttpError(404, 'User not found');
-        }
+        await this.userService.findById(movementData.user_id);
 
         return this.financialMovementRepository.createAndSave(movementData);
     }

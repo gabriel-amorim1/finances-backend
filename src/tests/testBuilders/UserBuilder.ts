@@ -1,4 +1,5 @@
 import { FinancialMovementInterface } from '../../interfaces/FinancialMovementInterface';
+import { SpendingDivisionBaseInterface } from '../../interfaces/SpendingDivisionBaseInterface';
 import { UserInterface } from '../../interfaces/UserInterface';
 
 export default class UserBuilder {
@@ -47,6 +48,13 @@ export default class UserBuilder {
         financial_movements: FinancialMovementInterface[],
     ): UserBuilder {
         this.user.financial_movements = financial_movements;
+        return this;
+    }
+
+    public withSpendingDivisionBase(
+        spending_division_base: SpendingDivisionBaseInterface,
+    ): UserBuilder {
+        this.user.spending_division_base = spending_division_base;
         return this;
     }
 

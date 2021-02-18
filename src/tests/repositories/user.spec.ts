@@ -2,11 +2,11 @@ import connect from '../../database/connection';
 import UserRepository from '../../repositories/user';
 import UserBuilder from '../testBuilders/UserBuilder';
 
-describe.skip('User context', () => {
+describe('User context', () => {
     let userRepository: UserRepository;
 
     beforeAll(async () => {
-        await connect();
+        await connect(true);
         userRepository = new UserRepository();
     });
 
@@ -42,16 +42,19 @@ describe.skip('User context', () => {
             .withFinancialMovements([])
             .build();
 
-        const { password, ...createdUser } = await userRepository.createAndSave(
-            user,
-        );
+        const {
+            spending_division_base,
+            password,
+            ...createdUser
+        } = await userRepository.createAndSave(user);
 
         const res = await userRepository.findById(createdUser.id);
 
         await userRepository.remove(createdUser.id);
 
-        expect(res).toEqual(createdUser);
+        expect(res).toEqual({ spending_division_base: null, ...createdUser });
         expect(password).not.toBeUndefined();
+        expect(spending_division_base).toBeUndefined();
     });
 
     it('Should return an User when find by email', async () => {
@@ -66,11 +69,11 @@ describe.skip('User context', () => {
             user,
         );
 
-        const res = await userRepository.findByEmail(createdUser.email);
+        const res = await userRepository.findByEmail(createdUser.email)!;
 
         await userRepository.remove(createdUser.id);
 
-        expect(res).toEqual(createdUser);
+        expect(res).toEqual({ spending_division_base: null, ...createdUser });
         expect(password).not.toBeUndefined();
     });
 
@@ -123,12 +126,15 @@ describe.skip('User context', () => {
 
         createdUser.email = 'gabriel@updated.com';
 
-        const res = await userRepository.update(createdUser);
+        const { spending_division_base, ...res } = await userRepository.update(
+            createdUser,
+        );
 
         await userRepository.remove(createdUser.id);
 
         expect(res).toEqual(createdUser);
         expect(res.id).toBe(createdUser.id);
+        expect(spending_division_base).toBeUndefined();
     });
 
     it('Should be able to remove an User by id', async () => {

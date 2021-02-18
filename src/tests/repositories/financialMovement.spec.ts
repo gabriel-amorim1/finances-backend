@@ -4,12 +4,12 @@ import UserRepository from '../../repositories/user';
 import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
 import UserBuilder from '../testBuilders/UserBuilder';
 
-describe.skip('FinancialMovement context', () => {
+describe('FinancialMovement context', () => {
     let financialMovementRepository: FinancialMovementRepository;
     let userRepository: UserRepository;
 
     beforeAll(async () => {
-        await connect();
+        await connect(true);
         userRepository = new UserRepository();
         financialMovementRepository = new FinancialMovementRepository();
     });
@@ -117,12 +117,12 @@ describe.skip('FinancialMovement context', () => {
 
         const res = await financialMovementRepository.getAll(<any>options);
 
-        const arrrayOfIds = res.data.map(movement => movement.id);
+        const arrayOfIds = res.data.map(movement => movement.id);
 
         await userRepository.remove(createdUser.id);
 
-        expect(arrrayOfIds.includes(id1)).toBeTruthy();
-        expect(arrrayOfIds.includes(id2)).toBeTruthy();
+        expect(arrayOfIds.includes(id1)).toBeTruthy();
+        expect(arrayOfIds.includes(id2)).toBeTruthy();
     });
 
     it('Should be able to update an Financial Movements by id', async () => {

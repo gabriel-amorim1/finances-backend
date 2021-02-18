@@ -1,8 +1,21 @@
 import { Router } from 'express';
 
 import * as SpendingDivisionController from '../controllers/SpendingDivisionController';
+import validatorMiddleware from '../utils/middlewares/validator';
+import {
+    createSpendingDivisionBaseSchema,
+    updateSpendingDivisionBaseSchema,
+} from '../utils/spendingDivision/validators';
 
 const router = Router();
+
+router.post(
+    '/base',
+    validatorMiddleware({
+        body: createSpendingDivisionBaseSchema,
+    }),
+    SpendingDivisionController.createSpendingDivisionBase,
+);
 
 /**
  * @swagger
@@ -34,6 +47,14 @@ const router = Router();
  */
 
 router.get('/base', SpendingDivisionController.getBaseSpendingDivision);
+
+router.put(
+    '/base',
+    validatorMiddleware({
+        body: updateSpendingDivisionBaseSchema,
+    }),
+    SpendingDivisionController.updateSpendingDivisionBase,
+);
 
 /**
  * @swagger

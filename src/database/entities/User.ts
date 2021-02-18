@@ -5,9 +5,11 @@ import {
     OneToMany,
     BeforeInsert,
     BeforeUpdate,
+    OneToOne,
 } from 'typeorm';
 import bcrypt from 'bcrypt';
 import FinancialMovement from './FinancialMovement';
+import SpendingDivisionBase from './SpendingDivisionBase';
 
 @Entity('users')
 export default class User {
@@ -41,6 +43,13 @@ export default class User {
     )
     financial_movements?: FinancialMovement[];
 
+    @OneToOne(
+        () => SpendingDivisionBase,
+        spendingDivisionBase => spendingDivisionBase.user,
+        { eager: true },
+    )
+    spending_division_base?: SpendingDivisionBase;
+
     @BeforeInsert()
     @BeforeUpdate()
     private async savePasswordHash(): Promise<void> {
@@ -49,7 +58,7 @@ export default class User {
         }
     }
 
-    checkPassword(password: string): Promise<boolean> {
+    async checkPassword(password: string): Promise<boolean> {
         return bcrypt.compare(password, this.password_hash);
     }
 }
