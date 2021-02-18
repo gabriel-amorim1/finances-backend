@@ -1,8 +1,10 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import { createConnections, Connection } from 'typeorm';
+import { createConnection, createConnections, Connection } from 'typeorm';
 
 dotenv.config();
+
+createConnection();
 
 export default async (isTesting = false): Promise<Connection[]> => {
     if (isTesting) {
@@ -37,9 +39,3 @@ export default async (isTesting = false): Promise<Connection[]> => {
         },
     ]);
 };
-
-// createConnection();
-
-// export default async (): Promise<Connection> => {
-//     return createConnection();
-// };
