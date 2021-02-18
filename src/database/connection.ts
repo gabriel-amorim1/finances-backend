@@ -4,7 +4,9 @@ import { createConnection, createConnections, Connection } from 'typeorm';
 
 dotenv.config();
 
-createConnection();
+if (process.env.ENVIRONMENT === 'PRODUCTION') {
+    createConnection();
+}
 
 export default async (isTesting = false): Promise<Connection[]> => {
     if (isTesting) {

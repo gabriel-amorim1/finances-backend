@@ -14,7 +14,10 @@ export default async (
     res: Response,
     next: NextFunction,
 ): Promise<void | Response> => {
-    if (process.env.ENVIRONMENT === 'PRODUCTION') {
+    if (
+        process.env.ENVIRONMENT === 'PRODUCTION' ||
+        process.env.ENVIRONMENT === 'DEV'
+    ) {
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
