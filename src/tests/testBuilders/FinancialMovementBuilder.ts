@@ -32,6 +32,11 @@ export default class FinancialMovementBuilder {
         return this;
     }
 
+    public withDate(date: string): FinancialMovementBuilder {
+        this.financialMovement.date = date;
+        return this;
+    }
+
     public withCreatedAt(createdAt: Date): FinancialMovementBuilder {
         this.financialMovement.created_at = createdAt;
         return this;

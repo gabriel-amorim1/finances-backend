@@ -1,8 +1,9 @@
-import { DeleteResult, getRepository, Repository } from 'typeorm';
+import { DeleteResult, Repository, getRepository } from 'typeorm';
+
 import FinancialMovement from '../database/entities/FinancialMovement';
 import { FinancialMovementInterface } from '../interfaces/FinancialMovementInterface';
-import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 import IFinancialMovementRepository from '../interfaces/repositories/IFinancialMovementRepository';
+import { OptionsTypeOrmGetAll } from '../interfaces/pagination';
 
 export default class FinancialMovementRepository
     implements IFinancialMovementRepository {
@@ -34,6 +35,8 @@ export default class FinancialMovementRepository
 
     public async getAllGroupByClassification(
         user_id: string,
+        startDateFilter: string,
+        endDateFilter: string,
     ): Promise<
         {
             classification: string;
@@ -48,6 +51,8 @@ export default class FinancialMovementRepository
                 financial_movements fm
             WHERE
                 fm.user_id = '${user_id}'
+            AND
+                fm.date BETWEEN '${startDateFilter}' AND '${endDateFilter}'
             GROUP BY
                 classification;
             `,

@@ -152,6 +152,8 @@ class SpendingDivisionService {
 
     public async getSpendingDivisionByUser(
         userId: string,
+        startDateFilter: string,
+        endDateFilter: string,
     ): Promise<SpendingDivisionInterface> {
         const user = await this.userService.findById(userId);
 
@@ -175,6 +177,8 @@ class SpendingDivisionService {
 
         const financialGroups = await this.financialMovementRepository.getAllGroupByClassification(
             userId,
+            startDateFilter,
+            endDateFilter,
         );
 
         const {

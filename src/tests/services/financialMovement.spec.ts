@@ -46,6 +46,7 @@ describe('FinancialMovement Service', () => {
             user_id: createdUser.id!,
             value: 123.01,
             classification: 'RECEITAS',
+            date: '2022-08-23',
             created_at: new Date(),
             updated_at: new Date(),
         };
@@ -71,6 +72,7 @@ describe('FinancialMovement Service', () => {
             user_id: createdUser.id!,
             value: 123.01,
             classification: 'RECEITAS',
+            date: '2022-08-23',
         };
 
         const res = await financialMovementService.create(financialMovement);
@@ -154,7 +156,7 @@ describe('FinancialMovement Service', () => {
 
         try {
             await financialMovementService.update(v4(), <any>{});
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe('Financial Movement not found');
         }
@@ -173,7 +175,7 @@ describe('FinancialMovement Service', () => {
 
         try {
             await financialMovementService.remove(v4());
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe('Financial Movement not found');
         }

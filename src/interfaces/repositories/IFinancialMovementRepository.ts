@@ -13,6 +13,8 @@ export default interface IFinancialMovementRepository {
     ): Promise<{ data: FinancialMovement[]; count: number }>;
     getAllGroupByClassification(
         user_id: string,
+        startDateFilter: string,
+        endDateFilter: string,
     ): Promise<
         {
             classification: string;

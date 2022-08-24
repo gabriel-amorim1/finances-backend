@@ -28,6 +28,7 @@ describe('Financial Movement Route context', () => {
             .withName('Gabriel')
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         financialMovementServiceSpy.create.resolves(<any>movementData);
@@ -51,6 +52,10 @@ describe('Financial Movement Route context', () => {
             errors: [
                 { property: 'name', message: 'The property name is required' },
                 { property: 'value', message: 'The property value is required' },
+                {
+                    message: 'The property date is required',
+                    property: 'date',
+                },
                 {
                     property: 'classification',
                     message: 'The property classification is required',

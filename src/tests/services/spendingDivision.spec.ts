@@ -1,14 +1,14 @@
-import { v4 } from 'uuid';
-import FinancialMovementService from '../../services/FinancialMovementService';
 import FakeFinancialMovementRepository from '../repositories/fakes/FakeFinancialMovementRepository';
-import UserService from '../../services/UserService';
-import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
-import SpendingDivisionService from '../../services/ SpendingDivisionService';
-import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
-import UserBuilder from '../testBuilders/UserBuilder';
-import { HttpError } from '../../utils/errors/HttpError';
-import { UserInterface } from '../../interfaces/UserInterface';
 import FakeSpendingDivisionBaseRepository from '../repositories/fakes/FakeSpendingDivisionBaseRepository';
+import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
+import FinancialMovementBuilder from '../testBuilders/FinancialMovementBuilder';
+import FinancialMovementService from '../../services/FinancialMovementService';
+import { HttpError } from '../../utils/errors/HttpError';
+import SpendingDivisionService from '../../services/ SpendingDivisionService';
+import UserBuilder from '../testBuilders/UserBuilder';
+import { UserInterface } from '../../interfaces/UserInterface';
+import UserService from '../../services/UserService';
+import { v4 } from 'uuid';
 
 describe('Spending Division Service', () => {
     let financialMovementService: FinancialMovementService;
@@ -49,6 +49,7 @@ describe('Spending Division Service', () => {
             .withClassification('RECEITAS')
             .withName('Salário')
             .withValue(15000)
+            .withDate('2022-08-23')
             .build();
 
         await financialMovementService.create(income);
@@ -58,6 +59,7 @@ describe('Spending Division Service', () => {
             .withClassification('GASTOS ESSENCIAIS')
             .withName('Despesas Domésticas')
             .withValue(5000)
+            .withDate('2022-08-23')
             .build();
 
         await financialMovementService.create(essentialExpense);
@@ -67,6 +69,7 @@ describe('Spending Division Service', () => {
             .withClassification('GASTOS NAO ESSENCIAIS')
             .withName('Academia')
             .withValue(500)
+            .withDate('2022-08-23')
             .build();
 
         await financialMovementService.create(nonEssentialExpense);
@@ -76,6 +79,7 @@ describe('Spending Division Service', () => {
             .withClassification('INVESTIMENTOS')
             .withName('CDB Banco Inter')
             .withValue(1000)
+            .withDate('2022-08-23')
             .build();
 
         await financialMovementService.create(investment);
@@ -85,6 +89,7 @@ describe('Spending Division Service', () => {
             .withClassification('GASTOS LIVRES')
             .withName('Rolês')
             .withValue(3000)
+            .withDate('2022-08-23')
             .build();
 
         await financialMovementService.create(waste);
@@ -133,7 +138,7 @@ describe('Spending Division Service', () => {
                 investments: 0.3,
                 wastes: 0.1,
             });
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe('User not found');
         }
@@ -173,7 +178,7 @@ describe('Spending Division Service', () => {
                 investments: 0.3,
                 wastes: 0.1,
             });
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
                 'This User has no spending division base registered yet.',
@@ -192,7 +197,7 @@ describe('Spending Division Service', () => {
                 investments: 0.3,
                 wastes: 0.1,
             });
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe('User not found');
         }
@@ -258,7 +263,7 @@ describe('Spending Division Service', () => {
             const createdUser = await userService.create(user);
 
             await spendingDivisionService.getBaseSpendingDivision(createdUser.id!);
-        } catch (error) {
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
                 'This User has no financial movements registered yet.',
@@ -268,9 +273,18 @@ describe('Spending Division Service', () => {
 
     it('should return calculated spending by user', async () => {
         const user = await makeSut();
+        const now = new Date();
+        const startDateFilter = new Date(now.getFullYear(), now.getMonth(), 1)
+            .toISOString()
+            .split('T')[0];
+        const endDateFilter = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+            .toISOString()
+            .split('T')[0];
 
         const res = await spendingDivisionService.getSpendingDivisionByUser(
             user.id!,
+            startDateFilter,
+            endDateFilter,
         );
 
         const expectedRes = {
@@ -283,6 +297,7 @@ describe('Spending Division Service', () => {
                         classification: 'RECEITAS',
                         name: 'Salário',
                         value: 15000,
+                        date: '2022-08-23',
                         id: res.income.financial_movements![0].id,
                         created_at: res.income.financial_movements![0].created_at,
                         updated_at: res.income.financial_movements![0].updated_at,
@@ -298,6 +313,7 @@ describe('Spending Division Service', () => {
                         classification: 'GASTOS ESSENCIAIS',
                         name: 'Despesas Domésticas',
                         value: 5000,
+                        date: '2022-08-23',
                         id: res.essentialExpenses.financial_movements![0].id,
                         created_at: res.essentialExpenses.financial_movements![0]
                             .created_at,
@@ -315,6 +331,7 @@ describe('Spending Division Service', () => {
                         classification: 'GASTOS NAO ESSENCIAIS',
                         name: 'Academia',
                         value: 500,
+                        date: '2022-08-23',
                         id: res.nonEssentialExpenses.financial_movements![0].id,
                         created_at: res.nonEssentialExpenses.financial_movements![0]
                             .created_at,
@@ -332,6 +349,7 @@ describe('Spending Division Service', () => {
                         classification: 'INVESTIMENTOS',
                         name: 'CDB Banco Inter',
                         value: 1000,
+                        date: '2022-08-23',
                         id: res.investments.financial_movements![0].id,
                         created_at: res.investments.financial_movements![0]
                             .created_at,
@@ -349,6 +367,7 @@ describe('Spending Division Service', () => {
                         classification: 'GASTOS LIVRES',
                         name: 'Rolês',
                         value: 3000,
+                        date: '2022-08-23',
                         id: res.waste.financial_movements![0].id,
                         created_at: res.waste.financial_movements![0].created_at,
                         updated_at: res.waste.financial_movements![0].updated_at,
@@ -376,8 +395,20 @@ describe('Spending Division Service', () => {
 
             const createdUser = await userService.create(user);
 
-            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id!);
-        } catch (error) {
+            const now = new Date();
+            const startDateFilter = new Date(now.getFullYear(), now.getMonth(), 1)
+                .toISOString()
+                .split('T')[0];
+            const endDateFilter = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+                .toISOString()
+                .split('T')[0];
+
+            await spendingDivisionService.getSpendingDivisionByUser(
+                createdUser.id!,
+                startDateFilter,
+                endDateFilter,
+            );
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
                 'This User has no financial movements registered yet.',
@@ -402,12 +433,25 @@ describe('Spending Division Service', () => {
                 .withClassification('gastos essenciais')
                 .withName('Despesas Domésticas')
                 .withValue(5000)
+                .withDate('2022-08-23')
                 .build();
 
             await financialMovementService.create(essentialExpense);
 
-            await spendingDivisionService.getSpendingDivisionByUser(createdUser.id!);
-        } catch (error) {
+            const now = new Date();
+            const startDateFilter = new Date(now.getFullYear(), now.getMonth(), 1)
+                .toISOString()
+                .split('T')[0];
+            const endDateFilter = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+                .toISOString()
+                .split('T')[0];
+
+            await spendingDivisionService.getSpendingDivisionByUser(
+                createdUser.id!,
+                startDateFilter,
+                endDateFilter,
+            );
+        } catch (error: any) {
             expect(error).toBeInstanceOf(HttpError);
             expect(error.message).toBe(
                 'This User has no financial movements as "RECEITAS" registered yet.',

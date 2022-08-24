@@ -10,9 +10,9 @@ module.exports = {
     synchronize: false,
     ssl: true,
     extra: {
-      ssl: {
-        rejectUnauthorized: false,
-      },
+        ssl: {
+            rejectUnauthorized: false,
+        },
     },
     entities: [process.env.TYPEORM_ENTITIES],
     migrationsTableName: 'migrations',

@@ -1,10 +1,11 @@
 import {
-    Entity,
     Column,
-    PrimaryGeneratedColumn,
-    ManyToOne,
+    Entity,
     JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import User from './User';
 
 @Entity('financial_movements')
@@ -23,6 +24,9 @@ export default class FinancialMovement {
 
     @Column()
     classification: string;
+
+    @Column({ type: 'date' })
+    date: string;
 
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;

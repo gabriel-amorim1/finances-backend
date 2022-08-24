@@ -29,6 +29,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const {
@@ -61,6 +62,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const createdFinancialMovement = await financialMovementRepository.createAndSave(
@@ -99,6 +101,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const movement2 = new FinancialMovementBuilder()
@@ -106,6 +109,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const { id: id1 } = await financialMovementRepository.createAndSave(
@@ -140,6 +144,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const createdMovement = await financialMovementRepository.createAndSave(
@@ -171,6 +176,7 @@ describe('FinancialMovement context', () => {
             .withUserId(createdUser.id)
             .withValue(123.01)
             .withClassification('RECEITAS')
+            .withDate('2022-08-23')
             .build();
 
         const createdMovement = await financialMovementRepository.createAndSave(

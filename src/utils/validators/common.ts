@@ -16,14 +16,13 @@ export const getAllRequestSchema = yup.object().shape({
             message: 'Only available DESC and ASC values.',
         }),
     created_at: yup.string().strict(true),
-    // TODO não funciona com sqlite
-    // dateFilter: yup.string().strict(true),
-    // startDateFilter: yup
-    //     .string()
-    //     .matches(/\d{4}-\d{2}-\d{2}/)
-    //     .strict(true),
-    // endDateFilter: yup
-    //     .string()
-    //     .matches(/\d{4}-\d{2}-\d{2}/)
-    //     .strict(true),
+    dateFilter: yup.string().strict(true),
+    startDateFilter: yup
+        .string()
+        .matches(/\d{4}-\d{2}-\d{2}/)
+        .strict(true),
+    endDateFilter: yup
+        .string()
+        .matches(/\d{4}-\d{2}-\d{2}/)
+        .strict(true),
 });

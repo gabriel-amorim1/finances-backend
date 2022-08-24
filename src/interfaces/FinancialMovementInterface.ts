@@ -1,11 +1,12 @@
-import User from '../database/entities/User';
 import { RequestGetAllInterface } from './pagination';
+import User from '../database/entities/User';
 
 export interface FinancialMovementInterface {
     user_id: string;
     name: string;
     value: number;
     classification: string;
+    date: string;
 
     id?: string;
     created_at?: Date;
@@ -18,4 +19,5 @@ export interface FinancialMovementRequestGetAllInterface
     name?: string;
     value?: number;
     classification?: string;
+    date?: string;
 }

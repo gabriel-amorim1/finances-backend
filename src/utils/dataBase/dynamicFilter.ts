@@ -1,7 +1,7 @@
 import { Between, FindOperator, Raw } from 'typeorm';
-import moment from 'moment';
 
 import { RequestGetAllInterface } from '../../interfaces/pagination';
+import moment from 'moment';
 
 export const dynamicFilter = <T>(
     data: T & RequestGetAllInterface,
@@ -40,8 +40,5 @@ export const betweenDataFilter = (
     startDate: string,
     endDate: string,
 ): FindOperator<moment.Moment> => {
-    return Between(
-        moment(startDate, 'YYYY-MM-DD').subtract(1, 'days'),
-        moment(endDate, 'YYYY-MM-DD').add(1, 'days'),
-    );
+    return Between(moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD'));
 };
